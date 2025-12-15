@@ -1,26 +1,91 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Colors */
+  --color-canvas: #F6F4EF;
+  --color-ink: #1C1C1C;
+  --color-gold: #C6A85E;
+  --color-emerald: #0F3D2E;
+  --color-clay: #E0DCD3;
+
+  /* Fonts - using CSS variables set by next/font */
+  --font-serif: var(--font-serif), serif;
+  --font-sans: var(--font-sans), sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  /* Letter spacing */
+  --tracking-tighter: -0.04em;
+  --tracking-tight: -0.02em;
+  --tracking-widest: 0.2em;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Custom utilities */
+@utility bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@utility bg-paper-gradient {
+  background-image: linear-gradient(180deg, #F6F4EF 0%, #EFEDE6 60%, #E6E2D8 100%);
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(198, 168, 94, 0.35);
+  color: #1C1C1C;
+}
+
+/* Canvas depth: ultra-subtle radial falloff (adds material without looking designed) */
+body {
+  background-image: radial-gradient(
+    1300px 900px at 50% -240px,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0) 72%
+  );
+}
+
+/* Glass checkmark */
+.glass-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #1C1C1C;
+  margin-top: 2px;
+}
+
+/* Subtle float animation for hero jars */
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.jar-float {
+  animation: subtle-float 7s ease-in-out infinite;
+}
+
+/* Premium silhouette shadow for transparent product PNGs */
+.jar-shadow {
+  filter:
+    drop-shadow(0 12px 20px rgba(0, 0, 0, 0.12))
+    drop-shadow(0 4px 8px rgba(0, 0, 0, 0.06));
+}
+
+@media (min-width: 768px) {
+  .jar-shadow {
+    filter:
+      drop-shadow(0 18px 28px rgba(0, 0, 0, 0.18))
+      drop-shadow(0 6px 12px rgba(0, 0, 0, 0.10));
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  .jar-float {
+    animation: none;
+  }
 }
