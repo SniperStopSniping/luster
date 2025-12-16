@@ -12,7 +12,7 @@ export default function SuccessPage() {
     <main className="min-h-screen flex items-center justify-center bg-canvas px-6">
       <div className="text-center max-w-md">
         <h1 className="font-serif text-4xl mb-6">Order Confirmed</h1>
-        <p className="text-ink/60 mb-8">Thank you for your purchase.</p>
+        <p className="text-ink/60 mb-8">Thank you for your purchase — your order is being processed.</p>
 
         <Link
           href="/"
