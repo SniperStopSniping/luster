@@ -3,6 +3,9 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useTransition } from 'react';
 
+import { goToCheckout } from '@/lib/goToCheckout';
+import { STRIPE_PRICES } from '@/lib/stripePrices';
+
 type Variant = 'clear' | 'nude' | 'duo';
 type Pack = 'single' | 'studio';
 type SkuKey = `${Variant}-${Pack}`;
@@ -72,6 +75,18 @@ function getSkuKey(variant: Variant, pack: Pack): SkuKey {
   return `${variant}-${pack}`;
 }
 
+function getPriceId(variant: Variant, pack: Pack) {
+  if (pack === 'single') {
+    if (variant === 'clear') return STRIPE_PRICES.gel5g_clear;
+    if (variant === 'nude') return STRIPE_PRICES.gel5g_nude;
+    return STRIPE_PRICES.duo5g_nude_clear;
+  }
+
+  if (variant === 'clear') return STRIPE_PRICES.gel25g_clear;
+  if (variant === 'nude') return STRIPE_PRICES.gel25g_nude;
+  return STRIPE_PRICES.duo25g_nude_clear;
+}
+
 // Glass checkmark component
 function GlassCheck() {
   return (
@@ -105,21 +120,8 @@ export function ProductSelector() {
     setError(null);
     startTransition(async () => {
       try {
-        const res = await fetch('/api/checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ variant, pack }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'Checkout failed');
-        }
-
-        if (data.url) {
-          window.location.href = data.url;
-        }
+        const priceId = getPriceId(variant, pack);
+        await goToCheckout(priceId, `${selectedSku.name} ${selectedSku.grams}`);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Something went wrong');
       }

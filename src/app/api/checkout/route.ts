@@ -1,102 +1,64 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const LOT = 'Lot No. 2025-JPN-01';
+import { STRIPE_PRICES } from '@/lib/stripePrices';
+
+export const runtime = 'nodejs';
 
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2025-11-17.clover',
-  });
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error('Missing STRIPE_SECRET_KEY');
+  return new Stripe(key, { apiVersion: '2025-11-17.clover' });
 }
 
-// Separate SKUs with fixed prices in cents — no multipliers
-const PRICES = {
-  single: {
-    clear: 1800,
-    nude: 1800,
-    duo: 2800,
-  },
-  studio: {
-    clear: 5800,
-    nude: 5800,
-    duo: 9800,
-  },
-} as const;
+function getSiteUrl() {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!raw) throw new Error('Missing NEXT_PUBLIC_SITE_URL');
+  return raw.replace(/\/+$/, '');
+}
 
-const PRODUCT_NAMES: Record<string, string> = {
-  clear: 'LUSTER Clear Structure',
-  nude: 'LUSTER Nude Structure',
-  duo: 'LUSTER System Duo',
-};
+function clampQuantity(input: unknown) {
+  if (typeof input !== 'number' || !Number.isInteger(input)) return 1;
+  if (input < 1 || input > 10) return 1;
+  return input;
+}
 
-const SIZES = {
-  single: '5g',
-  studio: '25g',
-} as const;
-
-const DESCRIPTIONS = {
-  single: {
-    clear: '5g · Professional use',
-    nude: '5g · Professional use',
-    duo: '5g Clear + 5g Nude',
-  },
-  studio: {
-    clear: '25g Studio size',
-    nude: '25g Studio size',
-    duo: '25g Clear + 25g Nude',
-  },
-} as const;
-
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { variant, pack } = body as { variant: string; pack: string };
+    const body = (await request.json()) as {
+      priceId?: string;
+      quantity?: unknown;
+      shade?: string;
+    };
 
-    if (!variant || !['clear', 'nude', 'duo'].includes(variant)) {
-      return NextResponse.json({ error: 'Invalid variant' }, { status: 400 });
+    const priceId = body?.priceId;
+    if (!priceId || typeof priceId !== 'string') {
+      return NextResponse.json({ error: 'Invalid priceId' }, { status: 400 });
     }
 
-    if (!['single', 'studio'].includes(pack)) {
-      return NextResponse.json({ error: 'Invalid pack' }, { status: 400 });
+    const allowlisted = (Object.values(STRIPE_PRICES) as string[]).includes(priceId);
+    if (!allowlisted) {
+      return NextResponse.json({ error: 'Invalid priceId' }, { status: 400 });
     }
 
-    const packKey = pack as keyof typeof PRICES;
-    const variantKey = variant as keyof typeof PRICES.single;
+    const quantity = clampQuantity(body?.quantity);
+    const shade = typeof body?.shade === 'string' && body.shade.trim() ? body.shade.trim() : undefined;
 
     const stripe = getStripe();
+    const siteUrl = getSiteUrl();
+
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'cad',
-            product_data: {
-              name: PRODUCT_NAMES[variant],
-              description: DESCRIPTIONS[packKey][variantKey],
-            },
-            unit_amount: PRICES[packKey][variantKey],
-          },
-          quantity: 1,
-        },
-      ],
       mode: 'payment',
-      success_url: `${request.nextUrl.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${request.nextUrl.origin}/cancel`,
-      metadata: {
-        variant,
-        pack,
-        size: SIZES[packKey],
-        lot: LOT,
-      },
+      line_items: [{ price: priceId, quantity }],
+      success_url: `${siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl}/cancel`,
+      ...(shade ? { metadata: { shade } } : {}),
     });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error('Checkout error:', error);
-    return NextResponse.json(
-      { error: 'Failed to create checkout session' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Checkout failed' }, { status: 500 });
   }
 }
 
