@@ -1,5 +1,7 @@
+import { ColorSystemHero } from '@/components/marketing/ColorSystemHero';
 import { Hero3DFeel } from '@/components/marketing/Hero3DFeel';
 import { MinimalDrawerNav } from '@/components/marketing/MinimalDrawerNav';
+import { SystemIntro } from '@/components/marketing/SystemIntro';
 import { ProductSelector } from '@/components/store/ProductSelector';
 import { TechAccordion } from '@/components/ui/TechAccordion';
 import { SectionScrollController } from '@/components/SectionScrollController';
@@ -14,6 +16,18 @@ export default function HomePage() {
         subtitle={
           'HEMA-free Japanese builder gel.\nDesigned for natural nail strength, clarity, and control.'
         }
+      />
+
+      <SystemIntro />
+
+      <ColorSystemHero
+        imageSrc="/images/colour-book.png"
+        imageAlt="LUSTER Structure System color palette showing sheer, milky, nude, and signature nude gel shades"
+        headline="Clarity First. Color Without Compromise."
+        body="Our Super Clear builder gel delivers unmatched clarity, designed to accept any color without distortion or clouding. From sheer to nude tones, each shade is balanced for natural depth and professional structure."
+        microLabel="Clear · Milky · Nude · Signature Nudes"
+        ctaText="View All Products →"
+        ctaHref="#shop"
       />
 
       <ProductSelector />

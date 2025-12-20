@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect, useRef } from 'react';
 
 import { goToCheckout } from '@/lib/goToCheckout';
 import { STRIPE_PRICES } from '@/lib/stripePrices';
@@ -110,6 +110,25 @@ export function ProductSelector() {
   const [pack, setPack] = useState<Pack>('single');
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Track if the shop section is in view
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Show checkout bar when section is at least 30% visible
+        setIsInView(entry.isIntersecting && entry.intersectionRatio >= 0.3);
+      },
+      { threshold: [0, 0.3, 0.5, 1] }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   // Derive selected SKU from state — null if no variant selected
   const selectedSku = variant ? SKUS[getSkuKey(variant, pack)] : null;
@@ -129,7 +148,7 @@ export function ProductSelector() {
   }
 
   return (
-    <section id="shop" data-scroll-section className="py-24 md:py-32 bg-canvas">
+    <section ref={sectionRef} id="shop" data-scroll-section className="py-24 md:py-32 bg-canvas">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <h2 className="font-serif text-4xl mb-12">Select Your System</h2>
 
@@ -223,9 +242,9 @@ export function ProductSelector() {
         )}
       </div>
 
-      {/* Mobile sticky CTA - only renders when selection exists */}
+      {/* Mobile sticky CTA - only renders when selection exists AND section is in view */}
       <AnimatePresence>
-        {selectedSku && (
+        {selectedSku && isInView && (
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
