@@ -120,7 +120,8 @@ export function MinimalDrawerNav() {
 
           <div className="mt-auto pt-6 border-t border-black/10 text-[11px] text-black/45 leading-relaxed">
             Shipping from Canada<br />
-            Free Canadian shipping over $75
+            Free Canadian shipping over $75<br />
+            Free Japan shipping over $99
           </div>
 
           <div className="pb-8 pt-4">
