@@ -220,7 +220,7 @@ export function Hero3DFeel({
               構造美学
             </motion.span>
             <motion.p 
-              className="mt-2 md:mt-3 text-xs md:text-sm text-ink/50 max-w-sm"
+              className="mt-2 md:mt-3 text-xs md:text-sm text-ink/50 max-w-sm whitespace-pre-line"
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}

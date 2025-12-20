@@ -11,7 +11,9 @@ export default function HomePage() {
       <MinimalDrawerNav />
       <Hero3DFeel
         title="LUSTER"
-        subtitle="HEMA-free Japanese builder gel."
+        subtitle={
+          'HEMA-free Japanese builder gel.\nDesigned for natural nail strength, clarity, and control.'
+        }
       />
 
       <ProductSelector />
