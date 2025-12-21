@@ -1,13 +1,13 @@
 export const STRIPE_PRICES = {
-  // 25g
-  gel25g_nude: "price_1SelpjAR5ZNVuHaHywIhuAhO",
-  gel25g_clear: "price_1SelpjAR5ZNVuHaH2osoIMi3",
-  duo25g_nude_clear: "price_1SelpjAR5ZNVuHaHNFA7VxKG",
+  // Builder in a Jar (placeholder IDs - replace with real Stripe price IDs)
+  jar_sample: "PLACEHOLDER_jar_sample",
+  jar_studio: "PLACEHOLDER_jar_studio",
+  jar_refill: "PLACEHOLDER_jar_refill",
 
-  // 5g
-  gel5g_nude: "price_1SelDhAR5ZNVuHaH1c9uqN9R",
-  gel5g_clear: "price_1SelDhAR5ZNVuHaHVoaqirMc",
-  duo5g_nude_clear: "price_1Selr5AR5ZNVuHaHDA6JTnSg",
+  // Builder in a Bottle (placeholder IDs - replace with real Stripe price IDs)
+  bottle_sample: "PLACEHOLDER_bottle_sample",
+  bottle_standard: "PLACEHOLDER_bottle_standard",
+  bottle_studio: "PLACEHOLDER_bottle_studio",
 } as const;
 
 

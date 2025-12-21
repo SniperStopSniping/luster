@@ -6,85 +6,67 @@ import { useState, useTransition, useEffect, useRef } from 'react';
 import { goToCheckout } from '@/lib/goToCheckout';
 import { STRIPE_PRICES } from '@/lib/stripePrices';
 
-type Variant = 'clear' | 'nude' | 'duo';
-type Pack = 'single' | 'studio';
-type SkuKey = `${Variant}-${Pack}`;
+type Format = 'jar' | 'bottle';
+type JarVariant = 'sample' | 'studio' | 'refill';
+type BottleVariant = 'sample' | 'standard' | 'studio';
 
 interface Sku {
   name: string;
-  finish: string;
-  grams: string;
+  description: string;
   priceCad: number;
-  specLine: string;
+  recommended?: boolean;
 }
 
-// Single source of truth for all SKU data
-const SKUS: Record<SkuKey, Sku> = {
-  'clear-single': { 
-    name: 'Clear Structure', 
-    finish: 'Clear', 
-    grams: '5g', 
+// Builder in a Jar options
+const JAR_SKUS: Record<JarVariant, Sku> = {
+  sample: { 
+    name: 'Sample Jar', 
+    description: 'Pure structural control',
     priceCad: 18,
-    specLine: 'Clear · 5g · For licensed professionals',
   },
-  'nude-single': { 
-    name: 'Nude Structure', 
-    finish: 'Warm Nude', 
-    grams: '5g', 
-    priceCad: 18,
-    specLine: 'Warm Nude · 5g · For licensed professionals',
+  studio: { 
+    name: 'Studio Jar', 
+    description: 'Balanced coverage for regular services',
+    priceCad: 58,
   },
-  'duo-single': { 
-    name: 'System Duo', 
-    finish: 'Clear + Nude', 
-    grams: '5g + 5g', 
+  refill: { 
+    name: 'Refill Jar', 
+    description: 'Designed for high-volume studio use',
+    priceCad: 158,
+    recommended: true,
+  },
+};
+
+// Builder in a Bottle options
+const BOTTLE_SKUS: Record<BottleVariant, Sku> = {
+  sample: { 
+    name: 'Sample Bottle', 
+    description: 'Precision application · Try format',
+    priceCad: 14,
+  },
+  standard: { 
+    name: 'Standard Bottle', 
+    description: 'Daily studio workflow',
     priceCad: 28,
-    specLine: '5g Clear + 5g Nude',
   },
-  'clear-studio': { 
-    name: 'Clear Structure', 
-    finish: 'Clear', 
-    grams: '25g', 
-    priceCad: 58,
-    specLine: 'Clear · 25g Studio size',
-  },
-  'nude-studio': { 
-    name: 'Nude Structure', 
-    finish: 'Warm Nude', 
-    grams: '25g', 
-    priceCad: 58,
-    specLine: 'Warm Nude · 25g Studio size',
-  },
-  'duo-studio': { 
-    name: 'System Duo', 
-    finish: 'Clear + Nude', 
-    grams: '25g + 25g', 
-    priceCad: 98,
-    specLine: '25g Clear + 25g Nude',
+  studio: { 
+    name: 'Studio Bottle', 
+    description: 'Designed for high-use professional services',
+    priceCad: 44,
+    recommended: true,
   },
 };
 
-// Product display names for the selection cards
-const PRODUCTS: Record<Variant, { name: string }> = {
-  clear: { name: 'Clear Structure' },
-  nude: { name: 'Nude Structure' },
-  duo: { name: 'System Duo' },
-};
-
-function getSkuKey(variant: Variant, pack: Pack): SkuKey {
-  return `${variant}-${pack}`;
+function getJarPriceId(variant: JarVariant) {
+  if (variant === 'sample') return STRIPE_PRICES.jar_sample;
+  if (variant === 'studio') return STRIPE_PRICES.jar_studio;
+  return STRIPE_PRICES.jar_refill;
 }
 
-function getPriceId(variant: Variant, pack: Pack) {
-  if (pack === 'single') {
-    if (variant === 'clear') return STRIPE_PRICES.gel5g_clear;
-    if (variant === 'nude') return STRIPE_PRICES.gel5g_nude;
-    return STRIPE_PRICES.duo5g_nude_clear;
-  }
-
-  if (variant === 'clear') return STRIPE_PRICES.gel25g_clear;
-  if (variant === 'nude') return STRIPE_PRICES.gel25g_nude;
-  return STRIPE_PRICES.duo25g_nude_clear;
+function getBottlePriceId(variant: BottleVariant) {
+  if (variant === 'sample') return STRIPE_PRICES.bottle_sample;
+  if (variant === 'standard') return STRIPE_PRICES.bottle_standard;
+  return STRIPE_PRICES.bottle_studio;
 }
 
 // Glass checkmark component
@@ -105,9 +87,9 @@ function GlassCheck() {
 }
 
 export function ProductSelector() {
-  // Initialize variant to null — no pre-selection
-  const [variant, setVariant] = useState<Variant | null>(null);
-  const [pack, setPack] = useState<Pack>('single');
+  const [format, setFormat] = useState<Format>('jar');
+  const [jarVariant, setJarVariant] = useState<JarVariant | null>(null);
+  const [bottleVariant, setBottleVariant] = useState<BottleVariant | null>(null);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [isInView, setIsInView] = useState(false);
@@ -120,7 +102,6 @@ export function ProductSelector() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Show checkout bar when section is at least 30% visible
         setIsInView(entry.isIntersecting && entry.intersectionRatio >= 0.3);
       },
       { threshold: [0, 0.3, 0.5, 1] }
@@ -130,22 +111,29 @@ export function ProductSelector() {
     return () => observer.disconnect();
   }, []);
 
-  // Derive selected SKU from state — null if no variant selected
-  const selectedSku = variant ? SKUS[getSkuKey(variant, pack)] : null;
+  // Derive selected SKU based on format
+  const selectedSku = format === 'jar' 
+    ? (jarVariant ? JAR_SKUS[jarVariant] : null)
+    : (bottleVariant ? BOTTLE_SKUS[bottleVariant] : null);
 
   async function handleCheckout() {
-    if (!variant || !selectedSku) return;
+    if (!selectedSku) return;
     
     setError(null);
     startTransition(async () => {
       try {
-        const priceId = getPriceId(variant, pack);
-        await goToCheckout(priceId, `${selectedSku.name} ${selectedSku.grams}`);
+        const priceId = format === 'jar' 
+          ? getJarPriceId(jarVariant!)
+          : getBottlePriceId(bottleVariant!);
+        await goToCheckout(priceId, selectedSku.name);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Something went wrong');
       }
     });
   }
+
+  const jarVariants: JarVariant[] = ['sample', 'studio', 'refill'];
+  const bottleVariants: BottleVariant[] = ['sample', 'standard', 'studio'];
 
   return (
     <section ref={sectionRef} id="shop" data-scroll-section className="py-24 md:py-32 bg-canvas">
@@ -153,62 +141,103 @@ export function ProductSelector() {
         <h2 className="font-serif text-4xl mb-12">Select Your System</h2>
 
         <fieldset className="mb-12">
-          <legend className="text-xs uppercase tracking-widest text-ink/40 mb-4">Volume</legend>
+          <legend className="text-xs uppercase tracking-widest text-ink/40 mb-4">Format</legend>
           <div className="flex gap-6">
-            {(['single', 'studio'] as const).map(p => (
+            {(['jar', 'bottle'] as const).map(f => (
               <button
-                key={p}
+                key={f}
                 type="button"
-                onClick={() => setPack(p)}
-                className={`cursor-pointer pb-1 ${pack === p ? 'border-b border-ink' : 'text-ink/40'}`}
+                onClick={() => setFormat(f)}
+                className={`cursor-pointer pb-1 ${format === f ? 'border-b border-ink' : 'text-ink/40'}`}
               >
-                {p === 'single' ? 'Single Unit' : 'Studio Pack'}
+                {f === 'jar' ? 'Builder in a Jar' : 'Builder in a Bottle'}
               </button>
             ))}
           </div>
         </fieldset>
 
         <fieldset>
-          <legend className="text-xs uppercase tracking-widest text-ink/40 mb-4">Choose Formula</legend>
+          <legend className="text-xs uppercase tracking-widest text-ink/40 mb-4">Choose Option</legend>
           <div className="border border-ink/10 divide-y divide-ink/10">
-            {(Object.keys(PRODUCTS) as Variant[]).map(v => {
-              const sku = SKUS[getSkuKey(v, pack)];
-              const isSelected = variant === v;
-              const isDuoRecommended = v === 'duo' && variant !== 'duo';
-              
-              return (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => setVariant(v)}
-                  className={`flex justify-between items-start p-5 cursor-pointer transition-colors text-left w-full ${
-                    isSelected 
-                      ? 'bg-clay' 
-                      : isDuoRecommended 
-                        ? 'bg-clay/40 border-l-2 border-l-ink/10' 
-                        : ''
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    {isSelected && <GlassCheck />}
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="block">{sku.name}</span>
-                        {isDuoRecommended && (
-                          <span className="text-[10px] uppercase tracking-widest text-ink/40">
-                            Recommended
-                          </span>
-                        )}
+            {format === 'jar' ? (
+              jarVariants.map(v => {
+                const sku = JAR_SKUS[v];
+                const isSelected = jarVariant === v;
+                const showRecommended = sku.recommended && !isSelected;
+                
+                return (
+                  <button
+                    key={v}
+                    type="button"
+                    onClick={() => setJarVariant(v)}
+                    className={`flex justify-between items-start p-5 cursor-pointer transition-colors text-left w-full ${
+                      isSelected 
+                        ? 'bg-clay' 
+                        : showRecommended 
+                          ? 'bg-clay/40 border-l-2 border-l-ink/10' 
+                          : ''
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {isSelected && <GlassCheck />}
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="block">{sku.name}</span>
+                          {showRecommended && (
+                            <span className="text-[10px] uppercase tracking-widest text-ink/40">
+                              Recommended
+                            </span>
+                          )}
+                        </div>
+                        <span className="block text-xs text-ink/40 mt-1">{sku.description}</span>
                       </div>
-                      <span className="block text-xs text-ink/40 mt-1">{sku.specLine}</span>
                     </div>
-                  </div>
-                  <span className="font-mono text-xs">
-                    ${sku.priceCad} CAD
-                  </span>
-                </button>
-              );
-            })}
+                    <span className="font-mono text-xs">
+                      ${sku.priceCad}
+                    </span>
+                  </button>
+                );
+              })
+            ) : (
+              bottleVariants.map(v => {
+                const sku = BOTTLE_SKUS[v];
+                const isSelected = bottleVariant === v;
+                const showRecommended = sku.recommended && !isSelected;
+                
+                return (
+                  <button
+                    key={v}
+                    type="button"
+                    onClick={() => setBottleVariant(v)}
+                    className={`flex justify-between items-start p-5 cursor-pointer transition-colors text-left w-full ${
+                      isSelected 
+                        ? 'bg-clay' 
+                        : showRecommended 
+                          ? 'bg-clay/40 border-l-2 border-l-ink/10' 
+                          : ''
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {isSelected && <GlassCheck />}
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="block">{sku.name}</span>
+                          {showRecommended && (
+                            <span className="text-[10px] uppercase tracking-widest text-ink/40">
+                              Recommended
+                            </span>
+                          )}
+                        </div>
+                        <span className="block text-xs text-ink/40 mt-1">{sku.description}</span>
+                      </div>
+                    </div>
+                    <span className="font-mono text-xs">
+                      ${sku.priceCad}
+                    </span>
+                  </button>
+                );
+              })
+            )}
           </div>
         </fieldset>
 
@@ -221,7 +250,7 @@ export function ProductSelector() {
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-sm text-ink/60 mb-1">
-                  {selectedSku.name} · {selectedSku.grams}
+                  {selectedSku.name}
                 </p>
                 <span className="font-mono text-xl">${selectedSku.priceCad} CAD</span>
               </div>
@@ -237,7 +266,7 @@ export function ProductSelector() {
           </div>
         ) : (
           <div className="hidden md:block mt-16 border-t border-ink pt-6">
-            <p className="text-ink/40 text-sm">Select a formula to continue</p>
+            <p className="text-ink/40 text-sm">Select a format to continue</p>
           </div>
         )}
       </div>
@@ -259,7 +288,7 @@ export function ProductSelector() {
             <div className="flex justify-between items-center gap-4">
               <div className="flex-1 min-w-0">
                 <p className="text-sm truncate">
-                  {selectedSku.name} · {selectedSku.grams}
+                  {selectedSku.name}
                 </p>
                 <p className="font-mono text-lg">${selectedSku.priceCad} CAD</p>
               </div>

@@ -14,7 +14,7 @@ export default function HomePage() {
       <Hero3DFeel
         title="LUSTER"
         subtitle={
-          'HEMA-free Japanese builder gel.\nDesigned for natural nail strength, clarity, and control.'
+          'HEMA-free Japanese builder gel.\nEngineered strength, clarity, and control.'
         }
       />
 
@@ -24,7 +24,7 @@ export default function HomePage() {
         imageSrc="/images/colour-book.png"
         imageAlt="LUSTER Structure System color palette showing sheer, milky, nude, and signature nude gel shades"
         headline="Clarity First. Color Without Compromise."
-        body="Our Super Clear builder gel delivers unmatched clarity, designed to accept any color without distortion or clouding. From sheer to nude tones, each shade is balanced for natural depth and professional structure."
+        body="Our Super Clear builder gel delivers unmatched clarity and accepts any color without distortion or clouding. From sheer to nude tones, each shade is balanced for natural depth and professional structure."
         microLabel="Clear · Milky · Nude · Signature Nudes"
         ctaText="View All Products →"
         ctaHref="#shop"
@@ -42,7 +42,8 @@ export default function HomePage() {
       <section id="studio" data-scroll-section className="bg-canvas py-24 md:py-32 border-b border-ink/10">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-serif text-3xl mb-1">Studio</h2>
-          <p className="text-ink/50 text-sm mb-6">Licensed professionals only.</p>
+          <p className="text-ink/50 text-sm mb-1">Licensed professionals only.</p>
+          <p className="text-ink/50 text-sm mb-6">Application review required. No minimum order.</p>
           <p className="text-ink/70 text-sm max-w-md mb-12 md:mb-14">
             Studio access unlocks education, studio pricing, and early releases.
           </p>

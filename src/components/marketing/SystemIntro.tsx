@@ -19,7 +19,7 @@ export function SystemIntro() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          Professional
+          Precision
           <br />
           Builder Gel Systems
         </motion.h2>
