@@ -92,9 +92,9 @@ export function TechAccordion() {
               aria-controls={contentId}
               className="w-full flex justify-between items-center py-5 text-left cursor-pointer group"
             >
-              <span className="text-sm font-medium">{section.title}</span>
+              <span className="text-sm md:text-base font-medium">{section.title}</span>
               <span 
-                className={`text-ink/40 transition-transform duration-200 ${
+                className={`text-ink/55 transition-transform duration-200 ${
                   isOpen ? 'rotate-180' : ''
                 }`}
                 aria-hidden="true"
@@ -112,9 +112,9 @@ export function TechAccordion() {
                 isOpen ? 'max-h-96 opacity-100 pb-5' : 'max-h-0 opacity-0'
               }`}
             >
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {section.items.map((item, idx) => (
-                  <li key={idx} className="text-sm text-ink/70 pl-0">
+                  <li key={idx} className="text-sm md:text-base text-ink/70 leading-relaxed pl-0">
                     {item}
                   </li>
                 ))}

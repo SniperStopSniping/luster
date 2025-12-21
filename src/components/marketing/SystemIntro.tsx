@@ -13,7 +13,7 @@ export function SystemIntro() {
 
       <div className="mx-auto max-w-3xl px-6 md:px-12 lg:px-6 py-24 md:py-32">
         <motion.h2
-          className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight mb-12 md:mb-16 leading-[1.1]"
+          className="font-serif text-3xl md:text-5xl lg:text-6xl tracking-tight mb-12 md:mb-16 leading-[1.1]"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
@@ -45,21 +45,21 @@ export function SystemIntro() {
         {/* Product links */}
         <div className="flex flex-col gap-2.5 mt-12 md:mt-16">
           <a
-            href="/shop/gel-in-jar"
-            className="text-xs md:text-sm font-medium text-ink/85 hover:text-ink underline underline-offset-2 decoration-ink/40 hover:decoration-ink transition-colors w-fit"
+            href="/shop"
+            className="text-sm font-medium text-ink/85 hover:text-ink underline underline-offset-2 decoration-ink/40 hover:decoration-ink transition-colors w-fit"
           >
             Explore Builder Gel in a Jar →
           </a>
           <a
-            href="/shop/gel-in-bottle"
-            className="text-xs md:text-sm font-medium text-ink/85 hover:text-ink underline underline-offset-2 decoration-ink/40 hover:decoration-ink transition-colors w-fit"
+            href="/shop"
+            className="text-sm font-medium text-ink/85 hover:text-ink underline underline-offset-2 decoration-ink/40 hover:decoration-ink transition-colors w-fit"
           >
             Explore Builder Gel in a Bottle →
           </a>
         </div>
 
         {/* Japanese characters accent */}
-        <span className="block mt-14 md:mt-20 text-[10px] uppercase tracking-[0.25em] text-ink/40">
+        <span className="block mt-14 md:mt-20 text-[10px] uppercase tracking-[0.25em] text-ink/55">
           精密構造 · Precision Structure
         </span>
       </div>

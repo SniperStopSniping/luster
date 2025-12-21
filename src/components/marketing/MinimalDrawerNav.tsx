@@ -5,7 +5,7 @@ import { useEffect, useId, useState } from 'react';
 type NavItem = { label: string; href: string };
 
 const ITEMS: NavItem[] = [
-  { label: 'Shop', href: '#shop' },
+  { label: 'Shop', href: '/shop' },
   { label: 'System', href: '#system' },
   { label: 'Studio', href: '#studio' },
 ];
@@ -85,7 +85,7 @@ export function MinimalDrawerNav() {
       >
         <div className="flex h-full flex-col px-6 pt-6">
           <div className="flex items-start justify-between">
-            <div className="text-[11px] tracking-[0.35em] text-black/45">
+            <div className="text-[11px] tracking-[0.35em] text-black/55">
               MENU
             </div>
             <button
@@ -95,7 +95,9 @@ export function MinimalDrawerNav() {
                          active:scale-[0.98] transition"
               aria-label="Close menu"
             >
-              <span className="block text-black/70 text-lg leading-none">×</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="text-black/70">
+                <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
             </button>
           </div>
 
@@ -111,21 +113,21 @@ export function MinimalDrawerNav() {
                 <span className="text-[18px] text-black/80 tracking-tight">
                   {it.label}
                 </span>
-                <span className="text-[11px] tracking-[0.35em] text-black/35 group-hover:text-black/50 transition">
+                <span className="text-[11px] tracking-[0.35em] text-black/50 group-hover:text-black/70 transition">
                   進む
                 </span>
               </a>
             ))}
           </nav>
 
-          <div className="mt-auto pt-6 border-t border-black/10 text-[11px] text-black/45 leading-relaxed">
+          <div className="mt-auto pt-6 border-t border-black/10 text-[11px] text-black/55 leading-relaxed">
             Shipping from Canada<br />
             Free Canadian shipping over $75<br />
             Free Japan shipping over $99
           </div>
 
           <div className="pb-8 pt-4">
-            <div className="text-[11px] text-black/40 leading-relaxed">
+            <div className="text-[11px] text-black/55 leading-relaxed">
               Pure Structure.<br />
               <span className="tracking-[0.2em]">構造美学</span>
             </div>

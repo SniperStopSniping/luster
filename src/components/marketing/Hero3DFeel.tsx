@@ -41,12 +41,10 @@ function SparkleOverlay({ variant = 'soft' }: { variant?: 'soft' | 'strong' }) {
         }}
       />
 
-      {/* Micro twinkles */}
+      {/* Micro twinkles - reduced for performance */}
       {[
-        { top: '22%', left: '34%', size: 7, delay: 0.2, dur: 2.6 },
-        { top: '38%', left: '64%', size: 5, delay: 1.1, dur: 2.9 },
-        { top: '58%', left: '44%', size: 6, delay: 0.8, dur: 3.2 },
-        { top: '72%', left: '70%', size: 4, delay: 1.9, dur: 2.4 },
+        { top: '28%', left: '40%', size: 6, delay: 0.3, dur: 3.0 },
+        { top: '62%', left: '65%', size: 5, delay: 1.5, dur: 3.2 },
       ].map((s, i) => (
         <motion.span
           key={i}
@@ -132,31 +130,9 @@ export function Hero3DFeel({
       className="relative min-h-[100svh] min-h-[100dvh] md:min-h-screen flex items-center bg-paper-gradient overflow-hidden"
     >
       <div className="absolute inset-0 bg-noise opacity-[0.03] mix-blend-multiply pointer-events-none" />
-      <motion.div 
-        className="absolute -right-20 top-0 h-[600px] w-[600px] rounded-full bg-gold/10 blur-[140px]"
-        animate={{ 
-          scale: [1, 1.08, 1],
-          opacity: [0.1, 0.15, 0.1],
-        }}
-        transition={{ 
-          duration: 12,
-          ease: "easeInOut",
-          repeat: Infinity,
-        }}
-      />
-      <motion.div 
-        className="absolute -left-40 bottom-0 h-[400px] w-[400px] rounded-full bg-gold/5 blur-[100px]"
-        animate={{ 
-          scale: [1, 1.12, 1],
-          opacity: [0.05, 0.1, 0.05],
-        }}
-        transition={{ 
-          duration: 15,
-          ease: "easeInOut",
-          repeat: Infinity,
-          delay: 2,
-        }}
-      />
+      {/* Background orbs - static for performance, CSS handles subtle glow */}
+      <div className="absolute -right-20 top-0 h-[600px] w-[600px] rounded-full bg-gold/10 blur-[140px]" />
+      <div className="absolute -left-40 bottom-0 h-[400px] w-[400px] rounded-full bg-gold/5 blur-[100px]" />
 
       <div className="mx-auto max-w-7xl px-6 md:px-12 pt-[54px] pb-[44px] md:py-[54px] w-full">
         <div className="flex flex-col md:grid md:grid-cols-12 gap-0 md:gap-16 md:items-center">
@@ -190,21 +166,13 @@ export function Hero3DFeel({
             <motion.p 
               className="mt-3 md:mt-4 text-[1.25rem] md:text-[1.625rem] font-serif text-ink/80 tracking-tight origin-left"
               initial={{ opacity: 0, y: 4 }}
-              animate={{ 
-                opacity: 1, 
-                y: 0,
-                letterSpacing: ["-0.02em", "0em", "-0.02em"],
-              }}
-              transition={{ 
-                opacity: { duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] },
-                y: { duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] },
-                letterSpacing: { duration: 10, ease: "easeInOut", repeat: Infinity, delay: 2 },
-              }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             >
               Pure Structure.
             </motion.p>
             <motion.span
-              className="block mt-1 md:mt-2 text-[10px] uppercase tracking-widest text-ink/30"
+              className="block mt-1 md:mt-2 text-[10px] uppercase tracking-widest text-ink/50"
               initial={{ opacity: 0 }}
               animate={{ 
                 opacity: [0, 1, 1, 0.15, 0.15, 1, 1],
@@ -220,7 +188,7 @@ export function Hero3DFeel({
               構造美学
             </motion.span>
             <motion.p 
-              className="mt-2 md:mt-3 text-xs md:text-sm text-ink/50 max-w-sm whitespace-pre-line"
+              className="mt-2 md:mt-3 text-sm text-ink/60 max-w-sm whitespace-pre-line"
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
@@ -231,7 +199,7 @@ export function Hero3DFeel({
             {/* CTA button */}
             <motion.a
               href="#shop"
-              className={`inline-flex mt-12 md:mt-14 ${ctaBaseClass}`}
+              className={`inline-flex mt-8 md:mt-10 ${ctaBaseClass}`}
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               whileTap={{ scale: 0.98 }}
@@ -243,7 +211,7 @@ export function Hero3DFeel({
 
           {/* Product images container */}
           <div
-            className="md:col-span-7 md:order-2 flex justify-center items-end -translate-y-[5px] md:translate-y-0"
+            className="md:col-span-7 md:order-2 flex justify-center items-end -translate-y-[4vh] md:-translate-y-[4vh]"
           >
             <div className="flex items-end">
               {/* NUDE jar - left, slightly behind */}
@@ -263,6 +231,8 @@ export function Hero3DFeel({
                     height={340}
                     sizes="(min-width: 768px) 280px, 50vw"
                     priority
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIklEQVQY02P4////f4b/DAwMDAxQDCaYGBgYGP7//88AABvPB/kfwsqoAAAAAElFTkSuQmCC"
                     className="relative jar-shadow w-[160px] md:w-[280px]"
                     style={{ objectFit: 'contain' }}
                   />
@@ -288,6 +258,8 @@ export function Hero3DFeel({
                     height={380}
                     sizes="(min-width: 768px) 320px, 55vw"
                     priority
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIklEQVQY02P4////f4b/DAwMDAxQDCaYGBgYGP7//88AABvPB/kfwsqoAAAAAElFTkSuQmCC"
                     className="relative jar-shadow w-[180px] md:w-[320px]"
                     style={{ objectFit: 'contain' }}
                   />

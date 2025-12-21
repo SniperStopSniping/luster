@@ -44,7 +44,7 @@ export function ColorSystemHero({
       <div className="relative z-10 px-4 md:px-6 pb-8 md:pb-20 lg:pb-24 pt-32 md:pt-40">
         {/* Semi-transparent panel for text readability */}
         <motion.div 
-          className="bg-canvas/80 backdrop-blur-sm rounded-2xl px-5 py-6 md:px-10 md:py-10 max-w-[22rem] md:max-w-xl lg:max-w-2xl mx-auto md:mx-0 shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
+          className="bg-canvas/80 backdrop-blur-sm rounded-lg px-5 py-6 md:px-10 md:py-10 max-w-[22rem] md:max-w-xl lg:max-w-2xl mx-auto md:mx-0 ring-1 ring-ink/[0.06]"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}

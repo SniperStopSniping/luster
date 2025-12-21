@@ -5,6 +5,7 @@ import { useState, useTransition, useEffect, useRef } from 'react';
 
 import { goToCheckout } from '@/lib/goToCheckout';
 import { STRIPE_PRICES } from '@/lib/stripePrices';
+import { useToast } from '@/components/ui/Toast';
 
 type Format = 'jar' | 'bottle';
 type JarVariant = 'sample' | 'studio' | 'refill';
@@ -91,9 +92,9 @@ export function ProductSelector() {
   const [jarVariant, setJarVariant] = useState<JarVariant | null>(null);
   const [bottleVariant, setBottleVariant] = useState<BottleVariant | null>(null);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
   const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const { showToast } = useToast();
 
   // Track if the shop section is in view
   useEffect(() => {
@@ -119,7 +120,6 @@ export function ProductSelector() {
   async function handleCheckout() {
     if (!selectedSku) return;
     
-    setError(null);
     startTransition(async () => {
       try {
         const priceId = format === 'jar' 
@@ -127,7 +127,7 @@ export function ProductSelector() {
           : getBottlePriceId(bottleVariant!);
         await goToCheckout(priceId, selectedSku.name);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Something went wrong');
+        showToast(err instanceof Error ? err.message : 'Checkout failed. Please try again.');
       }
     });
   }
@@ -141,7 +141,7 @@ export function ProductSelector() {
         <h2 className="font-serif text-4xl mb-12">Select Your System</h2>
 
         <fieldset className="mb-12">
-          <legend className="text-xs uppercase tracking-widest text-ink/40 mb-4">Format</legend>
+          <legend className="text-xs uppercase tracking-widest text-ink/55 mb-4">Format</legend>
           <div className="flex gap-6">
             {(['jar', 'bottle'] as const).map(f => (
               <button
@@ -150,14 +150,14 @@ export function ProductSelector() {
                 onClick={() => setFormat(f)}
                 className={`cursor-pointer pb-1 ${format === f ? 'border-b border-ink' : 'text-ink/40'}`}
               >
-                {f === 'jar' ? 'Builder in a Jar' : 'Builder in a Bottle'}
+                <span className="md:text-lg">{f === 'jar' ? 'Builder in a Jar' : 'Builder in a Bottle'}</span>
               </button>
             ))}
           </div>
         </fieldset>
 
         <fieldset>
-          <legend className="text-xs uppercase tracking-widest text-ink/40 mb-4">Choose Option</legend>
+          <legend className="text-xs uppercase tracking-widest text-ink/55 mb-4">Choose Option</legend>
           <div className="border border-ink/10 divide-y divide-ink/10">
             {format === 'jar' ? (
               jarVariants.map(v => {
@@ -182,17 +182,17 @@ export function ProductSelector() {
                       {isSelected && <GlassCheck />}
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="block">{sku.name}</span>
+                          <span className="block md:text-lg">{sku.name}</span>
                           {showRecommended && (
-                            <span className="text-[10px] uppercase tracking-widest text-ink/40">
+                            <span className="text-[9px] uppercase tracking-widest text-ink/50 pt-[5px]">
                               Recommended
                             </span>
                           )}
                         </div>
-                        <span className="block text-xs text-ink/40 mt-1">{sku.description}</span>
+                        <span className="block text-xs md:text-sm text-ink/55 mt-1">{sku.description}</span>
                       </div>
                     </div>
-                    <span className="font-mono text-xs">
+                    <span className="font-mono text-xs md:text-sm">
                       ${sku.priceCad}
                     </span>
                   </button>
@@ -221,17 +221,17 @@ export function ProductSelector() {
                       {isSelected && <GlassCheck />}
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="block">{sku.name}</span>
+                          <span className="block md:text-lg">{sku.name}</span>
                           {showRecommended && (
-                            <span className="text-[10px] uppercase tracking-widest text-ink/40">
+                            <span className="text-[9px] uppercase tracking-widest text-ink/50 pt-[5px]">
                               Recommended
                             </span>
                           )}
                         </div>
-                        <span className="block text-xs text-ink/40 mt-1">{sku.description}</span>
+                        <span className="block text-xs md:text-sm text-ink/55 mt-1">{sku.description}</span>
                       </div>
                     </div>
-                    <span className="font-mono text-xs">
+                    <span className="font-mono text-xs md:text-sm">
                       ${sku.priceCad}
                     </span>
                   </button>
@@ -244,9 +244,6 @@ export function ProductSelector() {
         {/* Desktop checkout - hidden on mobile, only shows when selection exists */}
         {selectedSku ? (
           <div className="hidden md:block mt-16 border-t border-ink pt-6">
-            {error && (
-              <p className="text-red-600 text-sm mb-4">{error}</p>
-            )}
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-sm text-ink/60 mb-1">
@@ -266,7 +263,7 @@ export function ProductSelector() {
           </div>
         ) : (
           <div className="hidden md:block mt-16 border-t border-ink pt-6">
-            <p className="text-ink/40 text-sm">Select a format to continue</p>
+            <p className="text-ink/55 text-sm">Select a format to continue</p>
           </div>
         )}
       </div>
@@ -282,9 +279,6 @@ export function ProductSelector() {
             className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-canvas border-t border-ink/10 p-4"
             style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 16px)' }}
           >
-            {error && (
-              <p className="text-red-600 text-sm mb-2">{error}</p>
-            )}
             <div className="flex justify-between items-center gap-4">
               <div className="flex-1 min-w-0">
                 <p className="text-sm truncate">

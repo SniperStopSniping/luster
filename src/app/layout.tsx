@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display, JetBrains_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
+
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ToastProvider } from '@/components/ui/Toast';
 
 const serif = Playfair_Display({ subsets: ['latin'], variable: '--font-serif' });
 const sans = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -30,6 +34,14 @@ export const metadata: Metadata = {
     description:
       'Professional Japanese builder gel for controlled nail structure.',
   },
+  icons: {
+    icon: [
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
 };
 
 export const viewport = {
@@ -43,7 +55,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${serif.variable} ${sans.variable} ${mono.variable} bg-canvas text-ink antialiased`}
       >
-        {children}
+        <ErrorBoundary>
+          <ToastProvider>
+            {children}
+          </ToastProvider>
+        </ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   );
