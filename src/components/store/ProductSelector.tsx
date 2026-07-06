@@ -45,16 +45,16 @@ const BOTTLE_SKUS: Record<BottleVariant, Sku> = {
     description: 'Precision application · Try format',
     priceCad: 14,
   },
-  standard: { 
-    name: 'Standard Bottle', 
+  standard: {
+    name: 'Standard Bottle',
     description: 'Daily studio workflow',
     priceCad: 28,
+    recommended: true,
   },
-  studio: { 
-    name: 'Studio Bottle', 
+  studio: {
+    name: 'Studio Bottle',
     description: 'Designed for high-use professional services',
     priceCad: 44,
-    recommended: true,
   },
 };
 
@@ -136,28 +136,31 @@ export function ProductSelector() {
   const bottleVariants: BottleVariant[] = ['sample', 'standard', 'studio'];
 
   return (
-    <section ref={sectionRef} id="shop" data-scroll-section className="py-24 md:py-32 bg-canvas">
+    <section ref={sectionRef} id="shop" className="py-24 md:py-32 bg-canvas border-t border-ink/[0.07]">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <h2 className="font-serif text-4xl mb-12">Select Your System</h2>
+        <span className="block text-[11px] uppercase tracking-[0.3em] text-gold/90 mb-4">
+          Build Your System
+        </span>
+        <h2 className="font-serif text-4xl mb-12 text-ink">Select Your System</h2>
 
         <fieldset className="mb-12">
-          <legend className="text-xs uppercase tracking-widest text-ink/55 mb-4">Format</legend>
+          <legend className="text-xs uppercase tracking-widest text-ink/70 mb-4">Format</legend>
           <div className="flex gap-6">
             {(['jar', 'bottle'] as const).map(f => (
               <button
                 key={f}
                 type="button"
                 onClick={() => setFormat(f)}
-                className={`cursor-pointer pb-1 ${format === f ? 'border-b border-ink' : 'text-ink/40'}`}
+                className={`cursor-pointer pb-1 ${format === f ? 'border-b border-gold text-champagne' : 'text-ink/60'}`}
               >
-                <span className="md:text-lg">{f === 'jar' ? 'Builder in a Jar' : 'Builder in a Bottle'}</span>
+                <span className="md:text-lg">{f === 'jar' ? 'Hard Builder Gel · Jar' : 'Builder in a Bottle'}</span>
               </button>
             ))}
           </div>
         </fieldset>
 
         <fieldset>
-          <legend className="text-xs uppercase tracking-widest text-ink/55 mb-4">Choose Option</legend>
+          <legend className="text-xs uppercase tracking-widest text-ink/70 mb-4">Choose Option</legend>
           <div className="border border-ink/10 divide-y divide-ink/10">
             {format === 'jar' ? (
               jarVariants.map(v => {
@@ -184,12 +187,12 @@ export function ProductSelector() {
                         <div className="flex items-center gap-2">
                           <span className="block md:text-lg">{sku.name}</span>
                           {showRecommended && (
-                            <span className="text-[9px] uppercase tracking-widest text-ink/50 pt-[5px]">
+                            <span className="text-[10px] uppercase tracking-widest text-ink/70 pt-[5px]">
                               Recommended
                             </span>
                           )}
                         </div>
-                        <span className="block text-xs md:text-sm text-ink/55 mt-1">{sku.description}</span>
+                        <span className="block text-xs md:text-sm text-ink/70 mt-1">{sku.description}</span>
                       </div>
                     </div>
                     <span className="font-mono text-xs md:text-sm">
@@ -223,12 +226,12 @@ export function ProductSelector() {
                         <div className="flex items-center gap-2">
                           <span className="block md:text-lg">{sku.name}</span>
                           {showRecommended && (
-                            <span className="text-[9px] uppercase tracking-widest text-ink/50 pt-[5px]">
+                            <span className="text-[10px] uppercase tracking-widest text-ink/70 pt-[5px]">
                               Recommended
                             </span>
                           )}
                         </div>
-                        <span className="block text-xs md:text-sm text-ink/55 mt-1">{sku.description}</span>
+                        <span className="block text-xs md:text-sm text-ink/70 mt-1">{sku.description}</span>
                       </div>
                     </div>
                     <span className="font-mono text-xs md:text-sm">
@@ -246,7 +249,7 @@ export function ProductSelector() {
           <div className="hidden md:block mt-16 border-t border-ink pt-6">
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-sm text-ink/60 mb-1">
+                <p className="text-sm text-ink/75 mb-1">
                   {selectedSku.name}
                 </p>
                 <span className="font-mono text-xl">${selectedSku.priceCad} CAD</span>
@@ -255,7 +258,7 @@ export function ProductSelector() {
                 type="button"
                 onClick={handleCheckout}
                 disabled={isPending}
-                className="bg-ink text-canvas px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-ink/90 transition-colors"
+                className="bg-gold text-canvas px-8 py-3 rounded-full text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-champagne transition-colors"
               >
                 {isPending ? 'Processing...' : 'Begin Checkout'}
               </button>
@@ -263,7 +266,7 @@ export function ProductSelector() {
           </div>
         ) : (
           <div className="hidden md:block mt-16 border-t border-ink pt-6">
-            <p className="text-ink/55 text-sm">Select a format to continue</p>
+            <p className="text-ink/70 text-sm">Select a format to continue</p>
           </div>
         )}
       </div>
@@ -276,7 +279,7 @@ export function ProductSelector() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-canvas border-t border-ink/10 p-4"
+            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-clay border-t border-gold/25 p-4"
             style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 16px)' }}
           >
             <div className="flex justify-between items-center gap-4">
@@ -290,7 +293,7 @@ export function ProductSelector() {
                 type="button"
                 onClick={handleCheckout}
                 disabled={isPending}
-                className="bg-ink text-canvas px-6 py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-ink/90 transition-colors whitespace-nowrap"
+                className="bg-gold text-canvas px-6 py-3 rounded-full text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-champagne transition-colors whitespace-nowrap"
               >
                 {isPending ? 'Processing...' : 'Checkout'}
               </button>

@@ -24,7 +24,6 @@ export function ColorSystemHero({
 }: ColorSystemHeroProps) {
   return (
     <section
-      data-scroll-section
       className="relative min-h-[100svh] min-h-[100dvh] flex flex-col justify-end overflow-hidden"
     >
       {/* Background image - shifted up on mobile to reveal more of the booklet */}
@@ -51,7 +50,7 @@ export function ColorSystemHero({
           transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           {/* Micro label - subtle, reads as a label */}
-          <span className="block text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-ink/35 md:text-ink/50 mb-3 md:mb-5">
+          <span className="block text-[11px] md:text-[11px] uppercase tracking-[0.2em] text-ink/55 md:text-ink/70 mb-3 md:mb-5">
             {microLabel}
           </span>
 
@@ -61,14 +60,14 @@ export function ColorSystemHero({
           </h2>
 
           {/* Body text */}
-          <p className="text-sm md:text-[15px] text-ink/70 leading-[1.7] mb-5 md:mb-8">
+          <p className="text-sm md:text-[15px] text-ink/80 leading-[1.7] mb-5 md:mb-8">
             {body}
           </p>
 
           {/* CTA Button */}
           <a
             href={ctaHref}
-            className="inline-flex items-center justify-center bg-ink text-canvas px-7 py-3.5 text-sm font-medium rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:bg-ink/90 hover:shadow-[0_6px_20px_rgba(0,0,0,0.2)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas active:translate-y-[1px]"
+            className="inline-flex items-center justify-center bg-gold text-canvas px-7 py-3.5 text-sm font-medium rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.35)] hover:bg-champagne hover:shadow-[0_6px_24px_rgba(198,168,94,0.3)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas active:translate-y-[1px]"
           >
             {ctaText}
           </a>

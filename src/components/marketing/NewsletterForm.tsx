@@ -36,13 +36,13 @@ export function NewsletterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
-        className="flex-1 px-4 py-3 bg-transparent border border-ink/20 text-ink text-sm placeholder:text-ink/40 focus:outline-none focus:border-ink/40 transition-colors"
+        className="flex-1 px-4 py-3 bg-transparent border border-ink/20 text-ink text-sm placeholder:text-ink/60 focus:outline-none focus:border-ink/40 transition-colors"
         disabled={isSubmitting}
       />
       <button
         type="submit"
         disabled={isSubmitting}
-        className="px-6 py-3 bg-ink text-canvas text-sm hover:bg-ink/90 transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-6 py-3 bg-gold text-canvas text-sm rounded-full font-medium hover:bg-champagne transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? 'Subscribing...' : 'Subscribe'}
       </button>

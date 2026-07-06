@@ -26,7 +26,8 @@ const SECTIONS: AccordionSection[] = [
     title: 'Performance',
     items: [
       'Supports controlled apex formation',
-      '3–4 weeks wear (professional application)',
+      'Builder in a Bottle: 3–4 weeks wear (professional application)',
+      'Hard Builder Gel (Jar): 6+ week retention (professional application)',
     ],
     defaultOpen: true,
   },
@@ -94,7 +95,7 @@ export function TechAccordion() {
             >
               <span className="text-sm md:text-base font-medium">{section.title}</span>
               <span 
-                className={`text-ink/55 transition-transform duration-200 ${
+                className={`text-ink/70 transition-transform duration-200 ${
                   isOpen ? 'rotate-180' : ''
                 }`}
                 aria-hidden="true"
@@ -114,7 +115,7 @@ export function TechAccordion() {
             >
               <ul className="space-y-4">
                 {section.items.map((item, idx) => (
-                  <li key={idx} className="text-sm md:text-base text-ink/70 leading-relaxed pl-0">
+                  <li key={idx} className="text-sm md:text-base text-ink/80 leading-relaxed pl-0">
                     {item}
                   </li>
                 ))}
