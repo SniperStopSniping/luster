@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
+import { MAX_QUANTITY_PER_ITEM } from '@/lib/products';
 import { STRIPE_PRICES } from '@/lib/stripePrices';
 
 export const runtime = 'nodejs';
@@ -19,8 +20,9 @@ function getSiteUrl() {
 
 function clampQuantity(input: unknown) {
   if (typeof input !== 'number' || !Number.isInteger(input)) return 1;
-  if (input < 1 || input > 10) return 1;
-  return input;
+  // Clamp to the nearest boundary rather than resetting out-of-range values to
+  // 1 — a silent reset would undercharge a cart that displayed a higher total.
+  return Math.min(MAX_QUANTITY_PER_ITEM, Math.max(1, input));
 }
 
 const allowedPriceIds = new Set(Object.values(STRIPE_PRICES) as string[]);

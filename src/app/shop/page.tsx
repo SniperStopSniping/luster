@@ -8,6 +8,7 @@ import { goToCartCheckout, CartCheckoutItem } from "@/lib/goToCartCheckout";
 import {
   BUILDER_IN_A_BOTTLE,
   HARD_BUILDER_GEL,
+  MAX_QUANTITY_PER_ITEM,
   moneyCAD,
   TIERS,
   type Format,
@@ -155,8 +156,18 @@ export default function LusterShopPage() {
       priceId,
     };
 
-    setCart((prev) => [...prev, item]);
-    setError(null);
+    // Cap per-SKU quantity to what checkout accepts, so the displayed cart total
+    // can never exceed the amount Stripe is charged. The check runs inside the
+    // updater so it sees the true previous cart even under batched rapid clicks.
+    setCart((prev) => {
+      const existingCount = prev.reduce((n, i) => (i.priceId === priceId ? n + 1 : n), 0);
+      if (existingCount >= MAX_QUANTITY_PER_ITEM) {
+        setError(`Maximum ${MAX_QUANTITY_PER_ITEM} per item — contact us for larger studio orders.`);
+        return prev;
+      }
+      setError(null);
+      return [...prev, item];
+    });
   };
 
   const handleCheckout = () => {

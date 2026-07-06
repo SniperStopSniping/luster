@@ -7,6 +7,13 @@
  *                        structure, advanced control, 6+ week retention.
  */
 
+/**
+ * Max units of a single SKU per checkout. Shared by the shop cart (client cap)
+ * and the checkout API (server clamp) so the displayed total always matches the
+ * amount Stripe is charged.
+ */
+export const MAX_QUANTITY_PER_ITEM = 10;
+
 export type Format = 'jar' | 'bottle';
 export type TierUnit = 'g' | 'mL';
 
