@@ -10,13 +10,13 @@ export default function TermsPage() {
   return (
     <main className="min-h-screen bg-canvas">
       <div className="max-w-2xl mx-auto px-6 py-24">
-        <Link href="/" className="text-ink/40 hover:text-ink text-sm mb-8 inline-block">
+        <Link href="/" className="text-ink/60 hover:text-ink text-sm mb-8 inline-block">
           ← Back
         </Link>
 
         <h1 className="font-serif text-4xl mb-12">Terms of Service</h1>
 
-        <div className="space-y-8 text-ink/70 leading-relaxed">
+        <div className="space-y-8 text-ink/80 leading-relaxed">
           <section>
             <h2 className="font-serif text-xl text-ink mb-4">Professional Use</h2>
             <p>
@@ -70,7 +70,7 @@ export default function TermsPage() {
             </p>
           </section>
 
-          <p className="text-sm text-ink/40 pt-8 border-t border-ink/10">
+          <p className="text-sm text-ink/60 pt-8 border-t border-ink/10">
             Last updated: December 2024
           </p>
         </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Component, ReactNode } from 'react';
 
 interface Props {
@@ -36,7 +37,7 @@ export class ErrorBoundary extends Component<Props, State> {
         <main className="min-h-screen flex items-center justify-center bg-canvas px-6">
           <div className="text-center max-w-md">
             {/* Japanese accent */}
-            <span className="block text-[10px] uppercase tracking-[0.25em] text-ink/40 mb-6">
+            <span className="block text-[11px] uppercase tracking-[0.25em] text-ink/60 mb-6">
               予期せぬエラー
             </span>
 
@@ -44,27 +45,27 @@ export class ErrorBoundary extends Component<Props, State> {
               Something went wrong
             </h1>
 
-            <p className="text-ink/60 mb-8 leading-relaxed">
+            <p className="text-ink/75 mb-8 leading-relaxed">
               We encountered an unexpected error. Please try again or return to the home page.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={this.handleRetry}
-                className="inline-flex items-center justify-center bg-ink text-canvas px-8 py-3 text-sm hover:bg-ink/90 transition-colors"
+                className="inline-flex items-center justify-center bg-gold text-canvas rounded-full px-8 py-3 text-sm font-medium hover:bg-champagne transition-colors"
               >
                 Try Again
               </button>
-              <a
+              <Link
                 href="/"
                 className="inline-flex items-center justify-center border border-ink/20 text-ink px-8 py-3 text-sm hover:bg-ink/5 transition-colors"
               >
                 Return Home
-              </a>
+              </Link>
             </div>
 
             {/* Subtle branding */}
-            <p className="mt-16 font-mono text-xs text-ink/30">
+            <p className="mt-16 font-mono text-xs text-ink/50">
               LUSTER · 構造美学
             </p>
           </div>

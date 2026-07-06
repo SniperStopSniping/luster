@@ -64,30 +64,30 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <div
                 className={`
                   flex items-center gap-3 px-5 py-3.5 rounded-lg
-                  bg-canvas border shadow-[0_8px_30px_rgba(0,0,0,0.12)]
-                  ${toast.type === 'error' ? 'border-red-200' : ''}
-                  ${toast.type === 'success' ? 'border-emerald/30' : ''}
-                  ${toast.type === 'info' ? 'border-ink/10' : ''}
+                  bg-clay border shadow-[0_8px_30px_rgba(0,0,0,0.5)]
+                  ${toast.type === 'error' ? 'border-red-400/40' : ''}
+                  ${toast.type === 'success' ? 'border-gold/40' : ''}
+                  ${toast.type === 'info' ? 'border-ink/15' : ''}
                 `}
               >
                 {/* Icon */}
                 {toast.type === 'error' && (
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-red-600">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-red-500/15 flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-red-400">
                       <path d="M6 3.5V6.5M6 8.5V8.51" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                     </svg>
                   </span>
                 )}
                 {toast.type === 'success' && (
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald/10 flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-emerald">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-gold/15 flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-champagne">
                       <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </span>
                 )}
                 {toast.type === 'info' && (
                   <span className="flex-shrink-0 w-5 h-5 rounded-full bg-ink/5 flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-ink/60">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-ink/75">
                       <path d="M6 5.5V8.5M6 3.5V3.51" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                     </svg>
                   </span>
@@ -102,7 +102,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   className="flex-shrink-0 ml-2 p-1 rounded hover:bg-ink/5 transition-colors"
                   aria-label="Dismiss"
                 >
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-ink/40">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-ink/60">
                     <path d="M2 2L10 10M10 2L2 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 </button>

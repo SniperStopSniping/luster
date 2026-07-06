@@ -1,35 +1,29 @@
 "use client";
 
+import Link from "next/link";
 import React, { useId, useRef, useState, useTransition } from "react";
 
+import { MinimalDrawerNav } from "@/components/marketing/MinimalDrawerNav";
 import { goToCartCheckout, CartCheckoutItem } from "@/lib/goToCartCheckout";
+import {
+  BUILDER_IN_A_BOTTLE,
+  HARD_BUILDER_GEL,
+  moneyCAD,
+  TIERS,
+  type Format,
+  type Pillar,
+  type Tier,
+} from "@/lib/products";
 import { STRIPE_PRICES, StripePriceKey } from "@/lib/stripePrices";
 
 /**
- * LUSTER — Shop System (Brand New Shop Page)
- * - Japanese industrial / warm paper aesthetic
+ * LUSTER — Shop System
+ * - Matte-black luxury aesthetic, gold accents
+ * - Two-pillar system: Japanese Hard Builder Gel (jar) + Builder in a Bottle
  * - Correct tab semantics + arrow key navigation + focus management
- * - Tier selection stored per-format at page level (robust)
- * - Typed size spec: { value, unit } with luxury-correct formatting
- * - Jars: NET WT. (g) / Bottles: NET VOL. (mL)
- * - Mobile ergonomics: Add button full-width, desktop aligns right
- * - Sticky cart summary includes bag icon, no delete actions
+ * - Tier selection stored per-format at page level
  * - Integrated with Stripe multi-item checkout
  */
-
-type Format = "jar" | "bottle";
-type TierUnit = "g" | "mL";
-
-type TierSpec = { value: number; unit: TierUnit };
-
-type Tier = {
-  id: string;
-  label: string;
-  price: number;
-  sub: string;
-  spec: TierSpec;
-  recommended?: boolean;
-};
 
 type Product = {
   id: string;
@@ -45,7 +39,6 @@ type CartItem = {
   uid: string;
   productId: string;
   name: string;
-  jpName: string;
   format: Format;
   shade: string;
   tierId: string;
@@ -54,48 +47,30 @@ type CartItem = {
   priceId: string;
 };
 
-const TIERS: Record<Format, Tier[]> = {
-  jar: [
-    { id: "sample", label: "Sample Jar", price: 18, sub: "Pure structural control", spec: { value: 5, unit: "g" } },
-    { id: "studio", label: "Studio Jar", price: 58, sub: "Balanced coverage for regular services", spec: { value: 25, unit: "g" } },
-    {
-      id: "refill",
-      label: "Refill Jar",
-      price: 158,
-      sub: "Designed for high-volume studio use",
-      spec: { value: 100, unit: "g" },
-      recommended: true,
-    },
-  ],
-  bottle: [
-    { id: "sample", label: "Sample Bottle", price: 14, sub: "Precision application · Try format", spec: { value: 5, unit: "mL" } },
-    { id: "standard", label: "Standard Bottle", price: 28, sub: "Daily studio workflow", spec: { value: 15, unit: "mL" }, recommended: true },
-    { id: "studio", label: "Studio Bottle", price: 44, sub: "Designed for high-use professional services", spec: { value: 30, unit: "mL" } },
-  ],
+const PILLAR_BY_FORMAT: Record<Format, Pillar> = {
+  jar: HARD_BUILDER_GEL,
+  bottle: BUILDER_IN_A_BOTTLE,
 };
 
-const PRODUCTS: Product[] = [
-  // JAR
-  { id: "clear-jar", name: "Clear Structure", jpName: "クリア", format: "jar", swatch: "rgba(255,255,255,0.92)", description: "Unmatched clarity for color layering and encapsulation.", shade: "clear" },
-  { id: "milky-jar", name: "Milky Structure", jpName: "ミルキー", format: "jar", swatch: "rgba(252,250,245,1)", description: "Soft diffusion for natural depth and gentle coverage.", shade: "milky" },
-  { id: "nude-jar", name: "Nude Structure", jpName: "ヌード", format: "jar", swatch: "rgba(228,203,180,0.75)", description: "Warm coverage with a natural finish for studio staples.", shade: "nude" },
-  { id: "sheer-jar", name: "Sheer Structure", jpName: "シアー", format: "jar", swatch: "rgba(245,235,228,0.85)", description: "A translucent veil for subtle structure and refinement.", shade: "sheer" },
-
-  // BOTTLE
-  { id: "clear-bottle", name: "Clear Structure", jpName: "クリア", format: "bottle", swatch: "rgba(255,255,255,0.92)", description: "Brush-applied control for consistent structure work.", shade: "clear" },
-  { id: "milky-bottle", name: "Milky Structure", jpName: "ミルキー", format: "bottle", swatch: "rgba(252,250,245,1)", description: "Soft coverage with workflow speed and brush control.", shade: "milky" },
-  { id: "nude-bottle", name: "Nude Structure", jpName: "ヌード", format: "bottle", swatch: "rgba(228,203,180,0.75)", description: "Natural warmth in a controlled-flow workflow format.", shade: "nude" },
-];
-
-const moneyCAD = new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" });
+function productsFor(format: Format): Product[] {
+  return PILLAR_BY_FORMAT[format].shades.map((s) => ({
+    id: `${s.id}-${format}`,
+    name: s.name,
+    jpName: s.jpName,
+    format,
+    swatch: s.swatch,
+    description: s.description,
+    shade: s.id,
+  }));
+}
 
 function getDefaultTierId(tiers: Tier[]) {
   return tiers.find((t) => t.recommended)?.id ?? tiers[0]?.id ?? "";
 }
 
-function formatSpec(format: Format, spec: TierSpec) {
+function formatSpec(format: Format, tier: Tier) {
   const label = format === "jar" ? "NET WT." : "NET VOL.";
-  return `${label} ${spec.value} ${spec.unit}`;
+  return `${label} ${tier.spec.value} ${tier.spec.unit}`;
 }
 
 /**
@@ -123,7 +98,7 @@ export default function LusterShopPage() {
   const jarPanelId = `${baseId}-panel-jar`;
   const bottlePanelId = `${baseId}-panel-bottle`;
 
-  const [format, setFormat] = useState<Format>("jar");
+  const [format, setFormat] = useState<Format>("bottle");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -134,8 +109,8 @@ export default function LusterShopPage() {
     bottle: getDefaultTierId(TIERS.bottle),
   });
 
-  const tiers = TIERS[format];
-  const activeProducts = PRODUCTS.filter((p) => p.format === format);
+  const activeProducts = productsFor(format);
+  const activePillar = PILLAR_BY_FORMAT[format];
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
   const cartCount = cart.length;
@@ -146,7 +121,7 @@ export default function LusterShopPage() {
   const setFormatAndFocus = (next: Format) => {
     setFormat(next);
     requestAnimationFrame(() => {
-      tabRefs.current[next === "jar" ? 0 : 1]?.focus();
+      tabRefs.current[next === "bottle" ? 0 : 1]?.focus();
     });
   };
 
@@ -154,7 +129,7 @@ export default function LusterShopPage() {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     e.preventDefault();
 
-    const order: Format[] = ["jar", "bottle"];
+    const order: Format[] = ["bottle", "jar"];
     const idx = order.indexOf(format);
     const nextIdx = e.key === "ArrowRight" ? (idx + 1) % order.length : (idx - 1 + order.length) % order.length;
     setFormatAndFocus(order[nextIdx]);
@@ -162,7 +137,7 @@ export default function LusterShopPage() {
 
   const addToCart = (product: Product, tier: Tier) => {
     const priceId = getStripePriceId(product.shade, product.format, tier.id);
-    
+
     const uid =
       typeof crypto !== "undefined" && "randomUUID" in crypto
         ? crypto.randomUUID()
@@ -172,7 +147,6 @@ export default function LusterShopPage() {
       uid,
       productId: product.id,
       name: product.name,
-      jpName: product.jpName,
       format: product.format,
       shade: product.shade,
       tierId: tier.id,
@@ -187,7 +161,7 @@ export default function LusterShopPage() {
 
   const handleCheckout = () => {
     if (cart.length === 0) return;
-    
+
     setError(null);
     startTransition(async () => {
       try {
@@ -210,38 +184,28 @@ export default function LusterShopPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F3EF] text-[#2D2D2D] pb-40 selection:bg-[#2D2D2D] selection:text-[#F5F3EF]">
-      {/* Paper bloom */}
+    <div className="min-h-screen bg-canvas text-ink pb-40">
+      <MinimalDrawerNav />
+
+      {/* Warm bloom */}
       <div
         aria-hidden="true"
-        className="fixed inset-0 pointer-events-none opacity-45
-                   bg-[radial-gradient(ellipse_at_20%_18%,rgba(255,255,255,0.90)_0%,transparent_55%),radial-gradient(ellipse_at_80%_72%,rgba(255,255,255,0.55)_0%,transparent_45%)]"
+        className="fixed inset-0 pointer-events-none opacity-60
+                   bg-[radial-gradient(ellipse_at_20%_10%,rgba(198,168,94,0.07)_0%,transparent_55%),radial-gradient(ellipse_at_85%_80%,rgba(198,168,94,0.04)_0%,transparent_45%)]"
       />
 
       {/* Header */}
       <header className="relative max-w-3xl mx-auto px-6 pt-14 md:pt-20">
-        <div className="flex items-center justify-between">
-          <a href="/" className="font-serif tracking-[0.2em] text-xs font-medium select-none hover:opacity-70 transition-opacity">
-            LUSTER STUDIO
-          </a>
-
-          <button
-            type="button"
-            aria-label="Open menu"
-            className="h-10 w-10 rounded-full bg-white/50 border border-black/5 flex flex-col items-center justify-center gap-1
-                       focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
-          >
-            <span className="w-4 h-px bg-[#2D2D2D]" />
-            <span className="w-4 h-px bg-[#2D2D2D]" />
-          </button>
-        </div>
+        <Link href="/" className="font-serif tracking-[0.2em] text-xs font-medium select-none text-ink/80 hover:text-champagne transition-colors">
+          LUSTER STUDIO
+        </Link>
 
         <div className="mt-12 md:mt-16">
-          <p className="text-[10px] tracking-[0.25em] text-[#8A8A8A] uppercase font-sans mb-4">
+          <p className="text-[11px] tracking-[0.25em] text-gold/90 uppercase font-sans mb-4">
             精 密 構 造 · Precision Structure
           </p>
-          <h1 className="font-serif text-4xl md:text-5xl tracking-tight text-[#1A1A1A]">Shop</h1>
-          <p className="mt-3 text-sm md:text-[15px] text-[#6D6D6D] font-sans">
+          <h1 className="font-serif text-4xl md:text-5xl tracking-tight text-ink">Shop</h1>
+          <p className="mt-3 text-sm md:text-[15px] text-ink/70 font-sans">
             Select format, choose tier, build your system.
           </p>
         </div>
@@ -252,53 +216,45 @@ export default function LusterShopPage() {
             role="tablist"
             aria-label="Select format"
             onKeyDown={onTabKeyDown}
-            className="inline-flex gap-8 border-b border-black/10 w-full md:w-auto"
+            className="inline-flex gap-8 border-b border-ink/10 w-full md:w-auto"
           >
-            <Tab
-              id={jarTabId}
-              controls={jarPanelId}
-              active={format === "jar"}
-              label="Builder in a Jar"
-              onClick={() => setFormatAndFocus("jar")}
-              tabRef={(el) => (tabRefs.current[0] = el)}
-            />
             <Tab
               id={bottleTabId}
               controls={bottlePanelId}
               active={format === "bottle"}
               label="Builder in a Bottle"
               onClick={() => setFormatAndFocus("bottle")}
+              tabRef={(el) => (tabRefs.current[0] = el)}
+            />
+            <Tab
+              id={jarTabId}
+              controls={jarPanelId}
+              active={format === "jar"}
+              label="Hard Builder Gel · Jar"
+              onClick={() => setFormatAndFocus("jar")}
               tabRef={(el) => (tabRefs.current[1] = el)}
             />
+          </div>
+
+          {/* Active pillar context */}
+          <div className="mt-6 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <p className="text-sm text-ink/70">
+              <span className="text-champagne font-serif">{activePillar.name}</span>
+              {" — "}
+              {activePillar.tagline}
+            </p>
+            <a
+              href={`/shop/${activePillar.slug}`}
+              className="text-xs text-gold/95 hover:text-champagne underline underline-offset-4 decoration-gold/70 transition-colors"
+            >
+              About this formula →
+            </a>
           </div>
         </div>
       </header>
 
       {/* Body */}
       <main className="relative max-w-3xl mx-auto px-4 md:px-6 mt-14 space-y-16">
-        {/* Jar panel */}
-        <section
-          id={jarPanelId}
-          role="tabpanel"
-          aria-labelledby={jarTabId}
-          tabIndex={0}
-          hidden={format !== "jar"}
-          className="space-y-16"
-        >
-          {format === "jar" &&
-            activeProducts.map((product) => (
-              <ProductRow
-                key={`${format}-${product.id}`}
-                product={product}
-                tiers={TIERS.jar}
-                format="jar"
-                selectedTierId={tierSelection.jar}
-                onSelectTier={(id) => setTierSelection((prev) => ({ ...prev, jar: id }))}
-                onAdd={addToCart}
-              />
-            ))}
-        </section>
-
         {/* Bottle panel */}
         <section
           id={bottlePanelId}
@@ -322,15 +278,38 @@ export default function LusterShopPage() {
             ))}
         </section>
 
+        {/* Jar panel */}
+        <section
+          id={jarPanelId}
+          role="tabpanel"
+          aria-labelledby={jarTabId}
+          tabIndex={0}
+          hidden={format !== "jar"}
+          className="space-y-16"
+        >
+          {format === "jar" &&
+            activeProducts.map((product) => (
+              <ProductRow
+                key={`${format}-${product.id}`}
+                product={product}
+                tiers={TIERS.jar}
+                format="jar"
+                selectedTierId={tierSelection.jar}
+                onSelectTier={(id) => setTierSelection((prev) => ({ ...prev, jar: id }))}
+                onAdd={addToCart}
+              />
+            ))}
+        </section>
+
         {/* Technical footer */}
-        <div className="pt-10 border-t border-black/5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 text-xs text-[#666]">
+        <div className="pt-10 border-t border-ink/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 text-xs text-ink/70">
             <div className="flex justify-between md:block">
-              <span className="text-[#999] block mb-1">Formulation</span>
+              <span className="text-ink/55 block mb-1">Formulation</span>
               <span>HEMA-free · Acid-free</span>
             </div>
             <div className="flex justify-between md:block">
-              <span className="text-[#999] block mb-1">Origin</span>
+              <span className="text-ink/55 block mb-1">Origin</span>
               <span>Engineered in Japan</span>
             </div>
           </div>
@@ -378,10 +357,10 @@ function Tab({
       onClick={onClick}
       className={[
         "pb-4 text-xs tracking-[0.12em] uppercase transition-all duration-300",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 rounded-sm",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-sm",
         active
-          ? "text-[#1A1A1A] border-b-2 border-[#1A1A1A] font-medium"
-          : "text-[#999] hover:text-[#555] border-b-2 border-transparent",
+          ? "text-champagne border-b-2 border-gold font-medium"
+          : "text-ink/60 hover:text-ink/80 border-b-2 border-transparent",
       ].join(" ")}
     >
       {label}
@@ -411,16 +390,16 @@ function ProductRow({
       {/* Product header */}
       <div className="flex gap-5 mb-6">
         <div
-          className="w-12 h-12 rounded-full border border-black/5 shadow-[inset_0_1px_4px_rgba(0,0,0,0.05)] shrink-0"
+          className="w-12 h-12 rounded-full border border-ink/15 shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)] shrink-0"
           style={{ backgroundColor: product.swatch }}
           aria-hidden="true"
         />
         <div className="min-w-0">
-          <h2 className="font-serif text-2xl text-[#1A1A1A] flex items-baseline gap-3 flex-wrap">
+          <h2 className="font-serif text-2xl text-ink flex items-baseline gap-3 flex-wrap">
             {product.name}
-            <span className="font-sans text-xs text-[#999] font-normal tracking-normal">{product.jpName}</span>
+            <span className="font-sans text-xs text-gold/85 font-normal tracking-normal">{product.jpName}</span>
           </h2>
-          <p className="text-sm text-[#666] mt-1 leading-relaxed max-w-md">{product.description}</p>
+          <p className="text-[15px] text-ink/75 mt-1 leading-relaxed max-w-md">{product.description}</p>
         </div>
       </div>
 
@@ -435,36 +414,36 @@ function ProductRow({
               onClick={() => onSelectTier(t.id)}
               className={[
                 "w-full text-left p-4 rounded-sm border transition-all duration-200 flex items-center justify-between gap-4",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50",
                 selected
-                  ? "bg-white border-[#2D2D2D]/20 shadow-sm"
-                  : "bg-transparent border-transparent hover:bg-white/40 hover:border-black/5",
+                  ? "bg-clay border-gold/35 shadow-[0_4px_20px_rgba(0,0,0,0.35)]"
+                  : "bg-transparent border-transparent hover:bg-clay/50 hover:border-ink/10",
               ].join(" ")}
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className={["text-sm", selected ? "font-medium text-[#1A1A1A]" : "text-[#555]"].join(" ")}>
+                  <span className={["text-sm", selected ? "font-medium text-champagne" : "text-ink/65"].join(" ")}>
                     {t.label}
                   </span>
 
                   {t.recommended && (
-                    <span className="text-[9px] uppercase tracking-[0.18em] text-[#777] bg-black/[0.04] px-2 py-1 rounded-[2px]">
+                    <span className="text-[10px] uppercase tracking-[0.18em] text-gold/95 border border-gold/30 px-2 py-1 rounded-[2px]">
                       推奨
                     </span>
                   )}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 mt-1">
-                  <span className="uppercase tracking-[0.18em] text-[9px] font-mono text-black/45 bg-black/[0.03] px-1 py-0.5 rounded-[2px]">
-                    {formatSpec(format, t.spec)}
+                  <span className="uppercase tracking-[0.18em] text-[10px] font-mono text-ink/60 bg-ink/[0.04] px-1 py-0.5 rounded-[2px]">
+                    {formatSpec(format, t)}
                   </span>
-                  <span className={["text-[11px]", selected ? "text-[#666]" : "text-[#999]"].join(" ")}>
+                  <span className={["text-[11px]", selected ? "text-ink/75" : "text-ink/60"].join(" ")}>
                     {t.sub}
                   </span>
                 </div>
               </div>
 
-              <div className="text-sm font-medium tabular-nums text-[#222]">{moneyCAD.format(t.price)}</div>
+              <div className="text-sm font-medium tabular-nums text-ink/90">{moneyCAD.format(t.price)}</div>
             </button>
           );
         })}
@@ -477,12 +456,12 @@ function ProductRow({
           onClick={() => onAdd(product, currentTier)}
           disabled={!currentTier}
           className="
-            w-full md:w-auto bg-[#1A1A1A] text-[#F5F3EF] px-8 py-3 rounded-full
+            w-full md:w-auto bg-gold text-canvas px-8 py-3 rounded-full
             text-xs font-bold tracking-[0.15em] uppercase
-            hover:bg-[#333] transition-all shadow-lg shadow-black/5
+            hover:bg-champagne transition-all shadow-lg shadow-black/30
             active:scale-[0.98]
             disabled:opacity-50 disabled:cursor-not-allowed
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50
           "
         >
           Add — {currentTier?.label ?? "Select Tier"}
@@ -490,7 +469,7 @@ function ProductRow({
       </div>
 
       {/* Divider */}
-      <div className="mt-14 h-px bg-black/[0.05]" />
+      <div className="mt-14 h-px bg-ink/[0.08]" />
     </article>
   );
 }
@@ -510,18 +489,18 @@ function StickyCartBar({
 }) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6 pointer-events-none">
-      <div className="max-w-3xl mx-auto bg-[#1A1A1A] text-[#F5F3EF] rounded-xl shadow-2xl p-4 flex flex-col pointer-events-auto ring-1 ring-white/10">
+      <div className="max-w-3xl mx-auto bg-clay text-ink rounded-xl shadow-2xl shadow-black/60 p-4 flex flex-col pointer-events-auto ring-1 ring-gold/25">
         {error && (
           <p className="text-red-400 text-xs mb-3 px-1">{error}</p>
         )}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 min-w-0">
-            <div className="bg-white/10 w-9 h-9 rounded-full flex items-center justify-center shrink-0">
-              <BagIcon className="w-4 h-4 text-white/85" />
+            <div className="bg-gold/15 w-9 h-9 rounded-full flex items-center justify-center shrink-0">
+              <BagIcon className="w-4 h-4 text-champagne" />
             </div>
 
             <div className="flex flex-col min-w-0">
-              <span className="text-[10px] uppercase tracking-widest text-white/60">
+              <span className="text-[11px] uppercase tracking-widest text-ink/70">
                 {count} item{count > 1 ? "s" : ""} in cart
               </span>
               <span className="font-serif text-lg leading-none mt-1 tabular-nums">{moneyCAD.format(total)}</span>
@@ -532,10 +511,10 @@ function StickyCartBar({
             type="button"
             onClick={onCheckout}
             disabled={isPending}
-            className="bg-[#F5F3EF] text-[#1A1A1A] px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase
-                       hover:bg-white transition-colors
+            className="bg-gold text-canvas px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase
+                       hover:bg-champagne transition-colors
                        disabled:opacity-50 disabled:cursor-not-allowed
-                       focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
           >
             {isPending ? "Processing..." : "Checkout"}
           </button>
@@ -544,4 +523,3 @@ function StickyCartBar({
     </div>
   );
 }
-
