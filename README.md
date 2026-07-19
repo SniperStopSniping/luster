@@ -1,4 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Luster Studio
+
+The public Luster Studio website at https://lusterstudio.ca. It combines the product storefront with professional education, artist community, and wholesale inquiry paths.
+
+## Site architecture
+
+- `/` — homepage with hero, promotions, products, Learn, Join, Wholesale, and About sections.
+- `/shop` and `/shop/[slug]` — repository-backed product storefront.
+- `/learn` and `/learn/[slug]` — permanent education hub and guide URLs. Incomplete guides use a Coming Soon state rather than a 404.
+- `/promotions` — honest empty state for future campaigns.
+- `/join` — inclusive artist opportunity and community form.
+- `/wholesale` — wholesale inquiry form.
+- `/studio` — compatibility redirect to `/join`.
+
+## Inquiry email configuration
+
+The public recipient is hard-coded as `hello@lusterstudio.ca` in `src/lib/site.ts`. Provider secrets are never stored in source control. Configure these deployment environment variables before enabling delivery:
+
+- `RESEND_API_KEY` — provider secret.
+- `LUSTER_EMAIL_FROM` — verified sender address supplied by the email provider.
+
+The API returns success to the form only after the email provider returns a successful response. Missing configuration and provider failures remain visible as errors.
+
+## Verification
+
+Run `npm run typecheck`, `npm run lint`, and `npm run build`. The redesign must also be checked across all approved Learn routes, form validation states, responsive layouts, keyboard access, canonical metadata, sitemap, robots, and broken links.
 
 ## Getting Started
 

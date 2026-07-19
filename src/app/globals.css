@@ -98,3 +98,10 @@ body {
     animation: none;
   }
 }
+
+.field { width: 100%; border: 1px solid rgba(18,18,20,.18); background: rgba(255,255,255,.55); padding: .85rem 1rem; color: #121214; outline: none; }
+.field:focus { border-color: #8d6b32; box-shadow: 0 0 0 3px rgba(141,107,50,.14); }
+.button-dark { display: inline-flex; align-items: center; justify-content: center; background: #121214; color: #f5f1e8; padding: .9rem 1.35rem; font-size: .875rem; transition: background .2s ease, transform .2s ease; }
+.button-dark:hover { background: #403a30; transform: translateY(-1px); }
+.button-light { display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(18,18,20,.24); color: #121214; padding: .9rem 1.35rem; font-size: .875rem; transition: background .2s ease; }
+.button-light:hover { background: rgba(18,18,20,.06); }

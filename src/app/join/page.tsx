@@ -1,0 +1,6 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { InquiryForm } from '@/components/marketing/InquiryForm';
+import { SITE_URL } from '@/lib/site';
+export const metadata: Metadata = { title: 'Join Luster', description: 'Introduce yourself and express interest in Luster Studio opportunities, education, product testing, and collaborations.', alternates: { canonical: `${SITE_URL}/join` } };
+export default function JoinPage() { return <main className="min-h-screen bg-[#f1eee7] text-[#121214]"><div className="mx-auto max-w-6xl px-6 py-8"><Link href="/" className="text-sm tracking-[.18em]">LUSTER STUDIO</Link><div className="grid gap-16 py-20 lg:grid-cols-[.85fr_1.15fr] lg:py-28"><header><p className="mb-5 text-xs uppercase tracking-[.25em] text-[#8d6b32]">Join Luster</p><h1 className="font-serif text-6xl leading-none md:text-8xl">Make room for what&apos;s next.</h1><p className="mt-8 max-w-md text-lg leading-8 text-black/65">We&apos;re building a community around professional products, useful education, and opportunities for artists at every stage.</p><p className="mt-8 max-w-md text-sm leading-7 text-black/55">You don&apos;t need formal certification to introduce yourself or express interest in Luster opportunities.</p></header><section className="bg-white/55 p-6 md:p-10"><InquiryForm kind="join" /></section></div></div></main> }

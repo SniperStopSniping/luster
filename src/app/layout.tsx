@@ -15,11 +15,11 @@ const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'LUSTER Japanese Builder Gel | Professional Structure System',
-    template: '%s | LUSTER',
+    default: 'Luster Studio | Professional Japanese Gel for Nail Artists',
+    template: '%s | Luster Studio',
   },
   description:
-    'LUSTER is a professional builder gel system for nail artists who value structure, control, and refined application. Builder in a Bottle and Japanese Hard Builder Gel with 6+ week retention — HEMA-free, acid-free, for licensed professionals in Toronto and across Canada.',
+    'Professional Japanese gel, practical education, and opportunities for modern nail artists. Explore Luster Studio products, guides, wholesale, and community.',
   keywords: [
     'Japanese builder gel',
     'professional builder gel',
@@ -29,17 +29,16 @@ export const metadata: Metadata = {
     'hard builder gel',
     'structure gel',
     'nail builder gel',
-    'HEMA-free builder gel',
-    'nail tech supplies Toronto',
+    'nail artist education',
+    'nail supplies Canada',
   ],
   alternates: { canonical: '/' },
   openGraph: {
-    title: 'LUSTER Japanese Builder Gel',
-    description:
-      'The LUSTER Structure System — professional Japanese builder gel engineered for structure, control, and refined application.',
+    title: 'Luster Studio | Professional Japanese Gel',
+    description: 'Professional Japanese gel, education, and opportunities for modern nail artists.',
     type: 'website',
     locale: 'en_CA',
-    siteName: 'LUSTER',
+    siteName: 'Luster Studio',
     url: SITE_URL,
     images: [
       {
@@ -52,9 +51,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LUSTER Japanese Builder Gel',
-    description:
-      'Professional Japanese builder gel for controlled nail structure. For licensed nail professionals.',
+    title: 'Luster Studio | Professional Japanese Gel',
+    description: 'Professional Japanese gel, education, and opportunities for modern nail artists.',
     images: ['/images/og-luster-builder-gel.jpg'],
   },
   icons: {
@@ -76,13 +74,13 @@ export const viewport = {
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'LUSTER',
+  name: 'Luster Studio',
   url: SITE_URL,
   logo: `${SITE_URL}/apple-touch-icon.png`,
   email: CONTACT_EMAIL,
   sameAs: [INSTAGRAM_URL],
   description:
-    'LUSTER is a professional Japanese builder gel system for licensed nail technicians — Builder in a Bottle and Japanese Hard Builder Gel with 6+ week retention.',
+    'Luster Studio creates professional Japanese gel products and education to help nail artists grow with confidence.',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Toronto',

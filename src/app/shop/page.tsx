@@ -221,6 +221,14 @@ export default function LusterShopPage() {
           </p>
         </div>
 
+        <nav aria-label="Product collections" className="mt-8 flex flex-wrap gap-2 text-xs uppercase tracking-[.12em]">
+          {['Builder Gels', 'Top Coats', 'Base Products', 'Professional Kits', 'Bundles', 'Wholesale'].map((collection) => (
+            <span key={collection} className={collection === 'Builder Gels' ? 'rounded-full bg-gold px-3 py-2 text-canvas' : 'rounded-full border border-ink/15 px-3 py-2 text-ink/55'}>
+              {collection}{collection !== 'Builder Gels' && ' · Soon'}
+            </span>
+          ))}
+        </nav>
+
         {/* Format Tabs */}
         <div className="mt-10">
           <div

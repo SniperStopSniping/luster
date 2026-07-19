@@ -1,144 +1,18 @@
-import { CinematicShowcase } from '@/components/marketing/CinematicShowcase';
-import { ColorSystemHero } from '@/components/marketing/ColorSystemHero';
-import { Hero } from '@/components/marketing/Hero';
+import Link from 'next/link';
+import Image from 'next/image';
 import { MinimalDrawerNav } from '@/components/marketing/MinimalDrawerNav';
 import { NewsletterForm } from '@/components/marketing/NewsletterForm';
-import { SignatureSystem } from '@/components/marketing/SignatureSystem';
-import { SystemIntro } from '@/components/marketing/SystemIntro';
-import { ProductSelector } from '@/components/store/ProductSelector';
-import { TechAccordion } from '@/components/ui/TechAccordion';
-import { SmoothScroll } from '@/components/SmoothScroll';
+import { PILLARS } from '@/lib/products';
+import { CONTACT_EMAIL } from '@/lib/site';
+import { GUIDES } from '@/lib/learn';
 
-export default function HomePage() {
-  return (
-    <main id="main-content" className="bg-canvas text-ink">
-      <SmoothScroll />
-      <MinimalDrawerNav />
-
-      <Hero />
-
-      <SignatureSystem />
-
-      <CinematicShowcase />
-
-      <SystemIntro />
-
-      <ColorSystemHero
-        imageSrc="/images/colour-book.png"
-        imageAlt="LUSTER Structure System color palette showing sheer, milky, nude, and signature nude gel shades"
-        headline="Clarity First. Color Without Compromise."
-        body="Our Super Clear builder gel delivers unmatched clarity and accepts any color without distortion or clouding. From sheer to nude tones, each shade is balanced for natural depth and professional structure."
-        microLabel="Clear · Milky · Nude · Signature Nudes"
-        ctaText="View All Products →"
-        ctaHref="/shop"
-      />
-
-      <ProductSelector />
-
-      <section id="technical" className="bg-charcoal py-24 md:py-32 border-t border-ink/[0.07]">
-        <div className="max-w-3xl mx-auto px-6">
-          <span className="block text-[11px] uppercase tracking-[0.3em] text-gold/90 mb-4">
-            Formulation Notes
-          </span>
-          <h2 className="font-serif text-3xl md:text-4xl mb-8 text-ink">Technical Overview</h2>
-          <TechAccordion />
-        </div>
-      </section>
-
-      {/* Studio — professional access */}
-      <section id="studio" className="min-h-[90dvh] bg-clay flex items-center border-t border-gold/15">
-        <div className="max-w-3xl mx-auto px-6 py-24 md:py-32">
-          <span className="block text-[11px] uppercase tracking-[0.25em] text-gold/90 mb-6">
-            プロフェッショナル · Professional Access
-          </span>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-6 tracking-tight text-ink">Studio</h2>
-          <p className="text-ink/75 text-base md:text-lg mb-2">Licensed professionals only.</p>
-          <p className="text-ink/75 text-base md:text-lg mb-10">Application review required. No minimum order.</p>
-          <p className="text-ink/80 text-base md:text-lg max-w-lg mb-12 leading-relaxed">
-            Studio access unlocks education, studio pricing, and early releases —
-            entry into a selective professional network, not a mailing list.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            <a
-              href="/studio"
-              className="inline-flex items-center justify-center rounded-full bg-gold text-canvas px-8 py-3.5 text-sm font-medium hover:bg-champagne transition-colors"
-            >
-              Apply for Studio Access
-            </a>
-            <a
-              href="mailto:hello@lustergel.com?subject=Wholesale%20Inquiry"
-              className="inline-flex items-center justify-center rounded-full border border-ink/25 text-ink/85 px-8 py-3.5 text-sm hover:border-gold/60 hover:text-champagne transition-colors"
-            >
-              Wholesale Inquiry
-            </a>
-          </div>
-          <a
-            href="mailto:hello@lustergel.com?subject=Education%20Updates"
-            className="text-ink/70 text-sm underline underline-offset-4 decoration-gold/60 hover:text-champagne hover:decoration-gold transition-colors"
-          >
-            Sign up for Education Updates →
-          </a>
-        </div>
-      </section>
-
-      {/* Final section - Newsletter + Footer combined */}
-      <footer className="bg-canvas flex flex-col border-t border-ink/[0.07]">
-        {/* Main content - centered */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-20 md:py-28">
-          {/* Brand mark */}
-          <span className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight mb-4 text-ink">LUSTER</span>
-          <p className="text-ink/70 text-sm max-w-sm mx-auto text-center mb-8">
-            The LUSTER Structure System — Japanese builder gel for controlled
-            structure and clarity.
-          </p>
-
-          {/* Newsletter - compact */}
-          <div className="w-full max-w-sm text-center mb-8">
-            <p className="text-sm text-ink/75 mb-4">Stay connected for early access and updates.</p>
-            <NewsletterForm />
-          </div>
-
-          {/* Social + Contact */}
-          <div className="flex items-center justify-center gap-6 text-sm">
-            <a
-              href="https://instagram.com/luster.gel"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ink/70 hover:text-champagne transition-colors flex items-center gap-1.5"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.5"/>
-                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5"/>
-                <circle cx="18" cy="6" r="1.5" fill="currentColor"/>
-              </svg>
-              @luster.gel
-            </a>
-            <a
-              href="mailto:hello@lustergel.com"
-              className="text-ink/70 hover:text-champagne transition-colors"
-            >
-              hello@lustergel.com
-            </a>
-          </div>
-        </div>
-
-        {/* Footer bar */}
-        <div className="border-t border-ink/10 py-4">
-          <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs">
-            <div className="flex items-center gap-3 text-ink/60">
-              <span>Formulated in Japan</span>
-              <span>·</span>
-              <span>Free CA $75+ · JP $99+</span>
-            </div>
-            <div className="flex items-center gap-4 text-ink/70">
-              <span className="text-gold/70">構造美学</span>
-              <a href="/privacy" className="hover:text-champagne transition-colors">Privacy</a>
-              <a href="/terms" className="hover:text-champagne transition-colors">Terms</a>
-              <span className="text-ink/50">© 2026</span>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </main>
-  );
-}
+const guideCards = GUIDES.slice(0, 3);
+export default function HomePage() { return <main id="main-content" className="bg-[#f1eee7] text-[#121214]"><MinimalDrawerNav />
+  <section className="relative flex min-h-[88vh] items-end overflow-hidden bg-[#121214] px-6 pb-16 text-[#f5f1e8] md:pb-24"><div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(205,176,106,.24),transparent_32%),linear-gradient(120deg,#121214,#28241d)]" /><div className="relative mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><p className="mb-6 text-xs uppercase tracking-[.3em] text-[#d5b86e]">Professional Japanese gel / Luster Studio</p><h1 className="max-w-4xl font-serif text-6xl leading-[.92] md:text-8xl lg:text-[8.5rem]">Designed for the way artists work.</h1><p className="mt-8 max-w-xl text-lg leading-8 text-white/65">Premium builder gels, professional education, and products built for modern nail artists.</p><div className="mt-10 flex flex-wrap gap-3"><Link href="/shop" className="rounded-full bg-[#d5b86e] px-6 py-3 text-sm text-[#121214]">Shop products</Link><Link href="/learn" className="rounded-full border border-white/25 px-6 py-3 text-sm">Learn</Link></div></div><div className="hidden justify-end lg:flex"><div className="max-w-xs border-l border-[#d5b86e]/50 pl-6 text-sm leading-7 text-white/60">Professional products, education, community, wholesale, and artist growth — brought together in one studio.</div></div></div></section>
+  <section className="border-b border-black/10 bg-[#e5dfd2] px-6 py-16 md:py-20"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-end"><div><p className="text-xs uppercase tracking-[.25em] text-[#8d6b32]">Promotions</p><h2 className="mt-4 font-serif text-4xl md:text-5xl">New Luster promotions are coming soon.</h2></div><Link href="/promotions" className="underline underline-offset-4">View promotions →</Link></div></section>
+  <section className="px-6 py-24 md:py-32"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-6"><div><p className="text-xs uppercase tracking-[.25em] text-[#8d6b32]">Featured products</p><h2 className="mt-4 font-serif text-5xl md:text-6xl">The working system.</h2></div><Link href="/shop" className="hidden text-sm underline underline-offset-4 sm:block">Shop all →</Link></div><div className="mt-14 grid gap-5 md:grid-cols-2">{PILLARS.map((product) => <Link href={`/shop/${product.slug}`} key={product.slug} className="group overflow-hidden bg-[#19191b] text-[#f5f1e8]"><div className="relative aspect-[1.2] overflow-hidden"><Image src={product.image} alt={product.imageAlt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover opacity-80 transition duration-700 group-hover:scale-105" /></div><div className="p-7"><p className="text-xs uppercase tracking-[.2em] text-[#d5b86e]">{product.jpLabel}</p><h3 className="mt-3 font-serif text-3xl">{product.name}</h3><p className="mt-4 max-w-md leading-7 text-white/60">{product.description}</p><span className="mt-8 inline-block text-sm underline underline-offset-4">Explore product →</span></div></Link>)}</div></div></section>
+  <section className="bg-[#121214] px-6 py-24 text-[#f5f1e8] md:py-32"><div className="mx-auto max-w-7xl"><div className="max-w-2xl"><p className="text-xs uppercase tracking-[.25em] text-[#d5b86e]">Learn</p><h2 className="mt-4 font-serif text-5xl md:text-6xl">A clearer path to better work.</h2><p className="mt-6 text-lg leading-8 text-white/60">Practical education for preparation, structure, application, retention, and the decisions behind each service.</p></div><div className="mt-14 grid gap-px bg-white/15 md:grid-cols-3">{guideCards.map((guide) => <Link href={`/learn/${guide.slug}`} key={guide.slug} className="bg-[#121214] p-7 transition hover:bg-[#222226]"><p className="text-xs uppercase tracking-[.16em] text-[#d5b86e]">{guide.readingTime}</p><h3 className="mt-16 font-serif text-3xl">{guide.title}</h3><p className="mt-4 leading-7 text-white/55">{guide.summary}</p><span className="mt-8 inline-block text-sm underline underline-offset-4">Read guide →</span></Link>)}</div><Link href="/learn" className="mt-10 inline-block text-sm underline underline-offset-4">Explore the learning studio →</Link></div></section>
+  <section className="grid gap-0 md:grid-cols-2"><div className="bg-[#c7b99d] px-6 py-24 md:p-24"><p className="text-xs uppercase tracking-[.25em] text-[#5b4826]">Join Luster</p><h2 className="mt-5 max-w-xl font-serif text-5xl md:text-6xl">Your next chapter belongs here.</h2><p className="mt-6 max-w-md leading-8 text-black/65">Introduce yourself, find opportunities, and stay close to education built for real studio work.</p><Link href="/join" className="mt-10 inline-block button-dark">Join the community</Link></div><div className="bg-[#e7e0d4] px-6 py-24 md:p-24"><p className="text-xs uppercase tracking-[.25em] text-[#8d6b32]">Wholesale</p><h2 className="mt-5 max-w-xl font-serif text-5xl md:text-6xl">Make Luster part of your studio.</h2><p className="mt-6 max-w-md leading-8 text-black/65">Tell us about your salon or business and we&apos;ll get back to you.</p><Link href="/wholesale" className="mt-10 inline-block button-light">Start a conversation</Link></div></section>
+  <section className="px-6 py-24 md:py-32"><div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[.8fr_1.2fr]"><p className="text-xs uppercase tracking-[.25em] text-[#8d6b32]">About Luster</p><div><h2 className="max-w-3xl font-serif text-5xl leading-tight md:text-7xl">Professional Japanese gel, with room to grow.</h2><p className="mt-8 max-w-2xl text-lg leading-8 text-black/65">Luster Studio brings together considered products, useful education, and an open professional community. We care about quality, innovation, and helping nail artists build practices that feel like their own.</p></div></div></section>
+  <footer className="bg-[#121214] px-6 py-16 text-[#f5f1e8]"><div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-3"><div><p className="font-serif text-4xl">LUSTER</p><p className="mt-4 max-w-xs text-sm leading-6 text-white/55">Professional Japanese gel and education for modern nail artists.</p></div><div><p className="text-xs uppercase tracking-[.2em] text-[#d5b86e]">Explore</p><div className="mt-5 grid gap-3 text-sm text-white/70"><Link href="/shop">Shop</Link><Link href="/learn">Learn</Link><Link href="/join">Join Luster</Link><Link href="/wholesale">Wholesale</Link><Link href="/promotions">Promotions</Link></div></div><div><p className="text-xs uppercase tracking-[.2em] text-[#d5b86e]">Stay connected</p><p className="mt-5 text-sm text-white/70">Education updates and studio news.</p><div className="mt-4"><NewsletterForm /></div><a href={`mailto:${CONTACT_EMAIL}`} className="mt-5 inline-block text-sm text-white/70 underline underline-offset-4">{CONTACT_EMAIL}</a></div></div><div className="mx-auto mt-16 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-5 text-xs text-white/45 sm:flex-row"><span>© 2026 Luster Studio</span><div className="flex gap-5"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div></div></footer>
+</main> }

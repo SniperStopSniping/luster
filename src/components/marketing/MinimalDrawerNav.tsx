@@ -6,9 +6,10 @@ type NavItem = { label: string; href: string };
 
 const ITEMS: NavItem[] = [
   { label: 'Shop', href: '/shop' },
-  { label: 'Builder in a Bottle', href: '/shop/builder-in-a-bottle' },
-  { label: 'Hard Builder Gel', href: '/shop/hard-builder-gel' },
-  { label: 'Studio Access', href: '/studio' },
+  { label: 'Learn', href: '/learn' },
+  { label: 'Promotions', href: '/promotions' },
+  { label: 'Join Luster', href: '/join' },
+  { label: 'Wholesale', href: '/wholesale' },
 ];
 
 export function MinimalDrawerNav() {

@@ -1,0 +1,5 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { SITE_URL } from '@/lib/site';
+export const metadata: Metadata = { title: 'Promotions', description: 'Current and upcoming Luster Studio promotions.', alternates: { canonical: `${SITE_URL}/promotions` } };
+export default function PromotionsPage() { return <main className="min-h-screen bg-[#f1eee7] text-[#121214]"><div className="mx-auto max-w-6xl px-6 py-8"><Link href="/" className="text-sm tracking-[.18em]">LUSTER STUDIO</Link><section className="flex min-h-[75vh] flex-col justify-center py-24"><p className="mb-5 text-xs uppercase tracking-[.25em] text-[#8d6b32]">Coming soon / Promotions</p><h1 className="max-w-3xl font-serif text-5xl leading-[.98] md:text-8xl">New Luster promotions are coming soon.</h1><p className="mt-8 max-w-xl text-lg leading-8 text-black/65">This will be the home for launch promotions, bundles, limited offers, artist promotions, and seasonal campaigns.</p><div className="mt-10 flex flex-wrap gap-3"><Link href="/shop" className="button-dark">Shop products</Link><Link href="/" className="button-light">Back home</Link></div></section></div></main> }

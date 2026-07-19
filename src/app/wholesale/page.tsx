@@ -1,0 +1,6 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { InquiryForm } from '@/components/marketing/InquiryForm';
+import { SITE_URL } from '@/lib/site';
+export const metadata: Metadata = { title: 'Wholesale', description: 'Tell Luster Studio about your salon or business and start a wholesale conversation.', alternates: { canonical: `${SITE_URL}/wholesale` } };
+export default function WholesalePage() { return <main className="min-h-screen bg-[#f1eee7] text-[#121214]"><div className="mx-auto max-w-6xl px-6 py-8"><Link href="/" className="text-sm tracking-[.18em]">LUSTER STUDIO</Link><div className="grid gap-16 py-20 lg:grid-cols-[.85fr_1.15fr] lg:py-28"><header><p className="mb-5 text-xs uppercase tracking-[.25em] text-[#8d6b32]">Wholesale</p><h1 className="font-serif text-6xl leading-none md:text-8xl">Build a better shelf.</h1><p className="mt-8 max-w-md text-lg leading-8 text-black/65">Tell us about your salon or business and we&apos;ll get back to you.</p><p className="mt-8 max-w-md text-sm leading-7 text-black/55">We&apos;ll use your note to understand your studio, your clients, and how Luster might fit your workflow.</p></header><section className="bg-white/55 p-6 md:p-10"><InquiryForm kind="wholesale" /></section></div></div></main> }
