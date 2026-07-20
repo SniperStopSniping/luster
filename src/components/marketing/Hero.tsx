@@ -87,7 +87,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease }}
           >
-            プロフェッショナル · For Licensed Nail Professionals
+            プロフェッショナル · For Nail Artists & Studios
           </motion.span>
 
           <motion.h1

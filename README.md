@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Current public experience
+
+The public site preserves the dark Luster luxury storefront and Studio Access request flow. Studio Access is reviewed, but does not require certification or a license. The email request is prefilled for a name, studio or salon name, city, and Instagram or website, and is sent to `hello@lusterstudio.ca`.
+
+The Learn hub lives at `/learn` with permanent guide URLs for builder gel foundations, preparation and retention, choosing flex versus control, application, apex and structure, rebalancing, removal, lifting, heat spikes, and storage. Five guides are complete starter articles; the remaining permanent URLs use Coming Soon states.
+
 ## Getting Started
 
 First, run the development server:

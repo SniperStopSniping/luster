@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { CinematicShowcase } from '@/components/marketing/CinematicShowcase';
 import { ColorSystemHero } from '@/components/marketing/ColorSystemHero';
 import { Hero } from '@/components/marketing/Hero';
@@ -8,6 +9,7 @@ import { SystemIntro } from '@/components/marketing/SystemIntro';
 import { ProductSelector } from '@/components/store/ProductSelector';
 import { TechAccordion } from '@/components/ui/TechAccordion';
 import { SmoothScroll } from '@/components/SmoothScroll';
+import { CONTACT_EMAIL } from '@/lib/site';
 
 export default function HomePage() {
   return (
@@ -52,7 +54,7 @@ export default function HomePage() {
             プロフェッショナル · Professional Access
           </span>
           <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-6 tracking-tight text-ink">Studio</h2>
-          <p className="text-ink/75 text-base md:text-lg mb-2">Licensed professionals only.</p>
+          <p className="text-ink/75 text-base md:text-lg mb-2">For artists, salons, studios, and educators.</p>
           <p className="text-ink/75 text-base md:text-lg mb-10">Application review required. No minimum order.</p>
           <p className="text-ink/80 text-base md:text-lg max-w-lg mb-12 leading-relaxed">
             Studio access unlocks education, studio pricing, and early releases —
@@ -66,18 +68,24 @@ export default function HomePage() {
               Apply for Studio Access
             </a>
             <a
-              href="mailto:hello@lustergel.com?subject=Wholesale%20Inquiry"
+              href={`mailto:${CONTACT_EMAIL}?subject=Wholesale%20Inquiry`}
               className="inline-flex items-center justify-center rounded-full border border-ink/25 text-ink/85 px-8 py-3.5 text-sm hover:border-gold/60 hover:text-champagne transition-colors"
             >
               Wholesale Inquiry
             </a>
           </div>
           <a
-            href="mailto:hello@lustergel.com?subject=Education%20Updates"
+            href={`mailto:${CONTACT_EMAIL}?subject=Education%20Updates`}
             className="text-ink/70 text-sm underline underline-offset-4 decoration-gold/60 hover:text-champagne hover:decoration-gold transition-colors"
           >
             Sign up for Education Updates →
           </a>
+          <Link
+            href="/learn"
+            className="text-ink/70 text-sm underline underline-offset-4 decoration-gold/60 hover:text-champagne hover:decoration-gold transition-colors"
+          >
+            Explore the Learning Studio →
+          </Link>
         </div>
       </section>
 
@@ -114,10 +122,10 @@ export default function HomePage() {
               @luster.gel
             </a>
             <a
-              href="mailto:hello@lustergel.com"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="text-ink/70 hover:text-champagne transition-colors"
             >
-              hello@lustergel.com
+              {CONTACT_EMAIL}
             </a>
           </div>
         </div>

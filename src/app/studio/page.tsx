@@ -7,14 +7,14 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { CONTACT_EMAIL, SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Studio Access — For Licensed Nail Professionals',
+  title: 'Studio Access — For Artists, Salons & Studios',
   description:
-    'Apply for LUSTER Studio Access: professional pricing, education, and early releases for licensed nail technicians, salon owners, and studios in Toronto and across Canada. Application review required.',
+    'Apply for LUSTER Studio Access: professional pricing, education, and early releases for artists, salons, educators, and studios in Toronto and across Canada. Application review required.',
   alternates: { canonical: `${SITE_URL}/studio` },
   openGraph: {
     title: 'LUSTER Studio Access',
     description:
-      'A selective professional network for licensed nail technicians and studios. Studio pricing, education, and early releases.',
+      'A selective professional network for artists, salons, studios, and educators. Studio pricing, education, and early releases.',
     url: `${SITE_URL}/studio`,
   },
 };
@@ -39,7 +39,7 @@ const BENEFITS = [
 ];
 
 const STEPS = [
-  { step: '01', title: 'Apply', body: 'Send your name, studio or salon, city, and license or certification details.' },
+  { step: '01', title: 'Apply', body: 'Send your name, studio or salon, city, and Instagram or website.' },
   { step: '02', title: 'Review', body: 'Applications are reviewed individually. We reply to every serious application.' },
   { step: '03', title: 'Access', body: 'Approved professionals receive studio pricing, education access, and early releases.' },
 ];
@@ -76,7 +76,7 @@ export default function StudioPage() {
           </span>
           <h1 className="mt-4 font-serif text-5xl tracking-tight text-ink md:text-7xl">Studio</h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-ink/65 md:text-lg">
-            LUSTER is a selective system for licensed nail professionals. Studio
+            LUSTER is a selective system for artists, salons, studios, and educators. Studio
             Access is entry into that standard — reviewed, not automatic.
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function StudioPage() {
         <div className="mx-auto max-w-3xl px-6">
           <p className="font-serif text-2xl leading-[1.4] tracking-tight text-ink/85 md:text-3xl">
             Not for everyone — deliberately. LUSTER partners with studios and
-            artists who treat structure as a craft: licensed, disciplined, and
+            artists who treat structure as a craft: disciplined, thoughtful, and
             uncompromising about the quality of their work.
           </p>
         </div>
@@ -124,7 +124,7 @@ export default function StudioPage() {
 
           <div className="mt-16 flex flex-col gap-4 border-t border-gold/15 pt-10 sm:flex-row">
             <a
-              href={`mailto:${CONTACT_EMAIL}?subject=Studio%20Access%20Application&body=Name%3A%0AStudio%20or%20salon%3A%0ACity%3A%0ALicense%20or%20certification%3A%0AInstagram%20or%20portfolio%3A`}
+              href={`mailto:${CONTACT_EMAIL}?subject=Studio%20Access%20Application&body=Name%3A%0AStudio%20or%20salon%20name%3A%0ACity%3A%0AInstagram%20or%20website%3A`}
               className="inline-flex items-center justify-center rounded-full bg-gold px-9 py-3.5 text-sm font-medium text-canvas transition-colors hover:bg-champagne"
             >
               Apply for Studio Access
@@ -137,7 +137,7 @@ export default function StudioPage() {
             </a>
           </div>
           <p className="mt-6 text-xs text-ink/60">
-            Licensed professionals only · Application review required · No minimum order
+            No license required · Application review required · No minimum order
           </p>
         </div>
       </section>

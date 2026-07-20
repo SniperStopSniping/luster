@@ -9,6 +9,7 @@ const ITEMS: NavItem[] = [
   { label: 'Builder in a Bottle', href: '/shop/builder-in-a-bottle' },
   { label: 'Hard Builder Gel', href: '/shop/hard-builder-gel' },
   { label: 'Studio Access', href: '/studio' },
+  { label: 'Learn', href: '/learn' },
 ];
 
 export function MinimalDrawerNav() {

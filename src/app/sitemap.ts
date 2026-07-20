@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 
 import { PILLARS } from '@/lib/products';
 import { SITE_URL } from '@/lib/site';
+import { GUIDES } from '@/lib/learn';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
@@ -16,6 +17,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     })),
     { url: `${SITE_URL}/studio`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${SITE_URL}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.8 },
+    ...GUIDES.map((guide) => ({ url: `${SITE_URL}/learn/${guide.slug}`, lastModified, changeFrequency: 'monthly' as const, priority: 0.6 })),
     { url: `${SITE_URL}/privacy`, lastModified, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${SITE_URL}/terms`, lastModified, changeFrequency: 'monthly', priority: 0.3 },
   ];
